@@ -1,0 +1,32 @@
+# See https://zellwk.com/blog/github-actions-deploy/ an explanation of this code
+name: Deploy Art & Design for Palestine
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to SERVER, backup and install
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_KEY }}
+          port: 2244
+          script: |
+            cd wwwroot/
+            d=`date +art-%Y%m%dT%H%M`
+            mkdir $d
+            mv * $d/
+            mv $d/backup-* .
+            mv $d/art-* .
+            cp .env $d/
+            rm -rf $d/vendor/
+            git clone --depth 1 --branch main https://${{ secrets.PAT }}@github.com/pbertels/artdesign.git tmp
+            mv tmp/* .
+            rm -rf tmp/
+            composer install
+            composer update
+

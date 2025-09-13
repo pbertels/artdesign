@@ -1,0 +1,7 @@
+# general
+.env
+.DS_Store
+
+# PHP composer
+composer.lock
+vendor
