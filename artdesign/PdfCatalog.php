@@ -18,8 +18,8 @@ class PdfCatalog extends \TCPDF
     public function Footer() {}
     public function writeHTMLCell($w, $h, $x, $y, $html = '', $border = 0, $ln = 0, $fill = 0, $reseth = true, $align = '', $autopadding = true)
     {
-        $html = preg_replace('/<h([1234])>/', '<h\1 style="font-family: Montserrat">', $html);
-        $html = preg_replace('/<strong>/', '<strong style="font-family: Montserrat">', $html);
+        // $html = preg_replace('/<h([1234])>/', '<h\1 style="font-family: Montserrat">', $html);
+        // $html = preg_replace('/<strong>/', '<strong style="font-family: Montserrat">', $html);
         return parent::writeHTMLCell($w, $h, $x, $y, $html, $border, $ln, $fill, $reseth, $align, $autopadding);
     }
 }

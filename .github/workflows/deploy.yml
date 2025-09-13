@@ -29,4 +29,5 @@ jobs:
             rm -rf tmp/
             composer install
             composer update
+            cp fonts/* vendor/tecnickcom/tcpdf/fonts/
 

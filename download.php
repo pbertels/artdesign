@@ -4,9 +4,91 @@ use ArtDesign\PdfCatalog;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$timestamp = date('Ymd-Hi');
+// FIND IMAGES
+$images = [];
+foreach (glob('./images/*.jpg') as $filename) {
+    $name = substr($filename, 9, -4);
+    $num = substr($name, -2, 1);
+    if (is_numeric($num)) {
+        $code = substr($name, 0, -1);
+        $pic = substr($name, -1, 1);
+    } else {
+        $code = $name;
+        $pic = 'u';
+    }
+    if (!isset($images[$code])) $images[$code] = [];
+    $images[$code][$pic] = $filename;
+}
 
+// PARSE DATA
+$art = [];
+$header = [];
+$fp = fopen('./data.tsv', 'r');
+while (!feof($fp)) {
+    $line = fgets($fp, 20048);
+    $data = str_getcsv($line, "\t");
+    if (count($header) == 0) {
+        $header = $data;
+    } else {
+        foreach ($data as $index => $value) {
+            $record[$header[$index]] = trim($value);
+        }
+        $code = $record['Code'];
+        if ($code == '') $code = count($art);
+        $record['im'] = isset($images[$code]) ? $images[$code] : [];
+        $art[$code] = $record;
+    }
+}
+fclose($fp);
+
+// // TEST
+// echo "<pre>" . count($art) . print_r($art, true) . '</pre>';
+// exit;
+
+
+// CREATE PDF
 $catalog = new PdfCatalog();
+$catalog->setFont('anton','',10);
 $catalog->AddPage();
-$catalog->writeHTMLCell(190, 40, 13, 13, '<h1>Art &amp; Design</h1>', 'LTR', 1, false, true, 'C', false);
+$catalog->writeHTMLCell(190, 40, 13, 13, '<h1>ART &amp; DESIGN FOR PALESTINE</h1>', 'LTRB', 1, false, true, 'C', false);
+
+// ART
+/*
+ [mgoossens1] => Array
+        (
+            [KunstDesigner] => Mario Goossens en Nathalie Sternotte
+            [Schenker] => idem
+            [BioBewerkt] => Dit boek is een samenwerking tussen Mario Goossens en Nathalie Sternotte.  Mario is een muzikaal multitalent, vooral bekend als drummer van Triggerfinger en als vaste waarde bij onder meer Bazart, Hooverphonic en Monza. Een Limburgse vijftiger die de wereld rondtrok en overal klank en ritme vond.  Nathalie is graficus met een frisse, eigenzinnige blik: ze zoekt geen standaardoplossingen. Haar creativiteit zit vaak in de uitvoering—precies, tactiel, doordacht—maar gaat moeiteloos hand in hand met sterke beeldvorming.
+            [Werk] => Detailed drumlines
+            [OverWerk] => Detailed drumlines is een creative benadering van een klassiek drumboek. Niet enkel de inhoud maar vooral de vormgeving telt. Elk nummer heeft zijn eigen verhaal, elk verhaal heeft zijn eigen visuele voorstelling. Hett is geen drumboek maar een doosje met waardepapieren. Aan jou om het esthetisch of praktisch te gebruiken.
+            [BioOrigineel] => Dit boek is een samenwerking tussen Mario Goossens en Nathalie Sternotte. Mario is een muzikaal multitalent, vooral bekend als drummer van Triggerfinger en als vaste waarde bij onder meer Bazart, Hooverphonic en Monza. Een Limburgse vijftiger die de wereld rondtrok en overal klank en ritme vond. Nathalie is graficus met een frisse, eigenzinnige blik: ze zoekt geen standaardoplossingen. Haar creativiteit zit vaak in de uitvoering—precies, tactiel, doordacht—maar gaat moeiteloos hand in hand met sterke beeldvorming.
+            [Prijs] => 50€
+            [Formaat] => 250 mm breed x 350 mm hoog x 40 mm diep
+            [Code] => mgoossens1
+            [im] => Array
+                (
+                    [a] => ./images/mgoossens1a.jpg
+                    [b] => ./images/mgoossens1b.jpg
+                )
+
+        )
+
+*/
+foreach ($art as $artwork) {
+    $catalog->AddPage();
+    $work = strtoupper($artwork['Werk']);
+    $artist = $artwork['KunstDesigner'];
+    $catalog->writeHTML("<h1>{$work}</h1>");
+    $catalog->writeHTML("<h1>{$artist}</h1>");
+    if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
+    if (is_array($artwork['im']))  foreach ($artwork['im'] as $pic => $image) {
+        // $catalog->writeHTML("<p>{$image}</p>");
+        // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', ['LT' => ['width'=>2,'color'=>[255,0,0]]], 'CM');
+        // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', 0, 'CM');
+        $catalog->Image($image, null, null, 100, 100, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
+    }
+}
+
+// OUTPUT
+$timestamp = date('Ymd-Hi');
 $catalog->output("catalog-{$timestamp}.pdf");
