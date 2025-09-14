@@ -34,7 +34,7 @@ while (!feof($fp)) {
             $record[$header[$index]] = trim($value);
         }
         $code = $record['Code'];
-        if ($code == '') $code = count($art);
+        if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = count($art);
         $record['im'] = isset($images[$code]) ? $images[$code] : [];
         $art[$code] = $record;
     }
@@ -55,6 +55,7 @@ $BLACK = [0, 0, 0];
 $catalog = new PdfCatalog();
 $catalog->setFont('anton', '', 10);
 $catalog->AddPage();
+// $catalog->Rect(0, 0, 216, 216, 'F', [], $DARK);
 $catalog->setColorArray('text', $RED);
 // $catalog->writeHTMLCell(190, 10, 13, 13, '<h1 style="color: rgb(235,90,56)">ART &amp; DESIGN</h1>', 'LTRB', 1, false, true, 'C', false);
 $catalog->writeHTMLCell(190, 25, 13, 13, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
@@ -87,6 +88,7 @@ $catalog->writeHTMLCell(190, 25, 13, 38, '<h1 style="font-size: 645%">FOR PALEST
 if (true) {
     foreach ($art as $artwork) {
         $catalog->AddPage();
+        $catalog->setFont('anton', '', 10);
         $work = strtoupper($artwork['Werk']);
         $artist = $artwork['KunstDesigner'];
         $catalog->setColorArray('text', $RED);
@@ -94,13 +96,29 @@ if (true) {
         $catalog->setColorArray('text', $GREEN);
         $catalog->writeHTML("<h1>{$artist}</h1>");
         $catalog->setColorArray('text', $BLACK);
+        $catalog->setFont('helvetica', '', 10);
         if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
-        if (is_array($artwork['im']))  foreach ($artwork['im'] as $pic => $image) {
-            // $catalog->writeHTML("<p>{$image}</p>");
-            // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', ['LT' => ['width'=>2,'color'=>[255,0,0]]], 'CM');
-            // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', 0, 'CM');
-            $catalog->Image($image, null, null, 100, 100, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
+
+        $catalog->setFont('anton', '', 10);
+        $catalog->writeHTML("<p></p><h3>Over het werk</h3>");
+        $catalog->setFont('helvetica', '', 10);
+        $catalog->writeHTML("<p>{$artwork['OverWerk']}</p><p></p>");
+
+        $catalog->setFont('anton', '', 10);
+        $catalog->writeHTML("<h3>Biografie {$artist}</h3>");
+        $bio = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
+        $catalog->setFont('helvetica', '', 10);
+        $catalog->writeHTML("<p>{$bio}</p>");
+
+        if (!is_array($artwork['im'])) continue;
+        $catalog->AddPage();
+        $count = count($artwork['im']);
+        foreach ($artwork['im'] as $pic => $image) {
+            $catalog->Image($image, 0, 0, 216, 216, '', '', '', true, 600, 'C', false, false, 0, 'CB', false, false, false);
+            // $catalog->Image($image, 0, 0, 216, 216, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
         }
+
+
     }
 }
 
