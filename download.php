@@ -46,11 +46,20 @@ fclose($fp);
 // exit;
 
 
+// DEFINITIONS
+$RED = [235, 90, 60];
+$GREEN = [80, 127, 35];
+$BLACK = [0, 0, 0];
+
 // CREATE PDF
 $catalog = new PdfCatalog();
-$catalog->setFont('anton','',10);
+$catalog->setFont('anton', '', 10);
 $catalog->AddPage();
-$catalog->writeHTMLCell(190, 40, 13, 13, '<h1>ART &amp; DESIGN FOR PALESTINE</h1>', 'LTRB', 1, false, true, 'C', false);
+$catalog->setColorArray('text', $RED);
+// $catalog->writeHTMLCell(190, 10, 13, 13, '<h1 style="color: rgb(235,90,56)">ART &amp; DESIGN</h1>', 'LTRB', 1, false, true, 'C', false);
+$catalog->writeHTMLCell(190, 25, 13, 13, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
+$catalog->setColorArray('text', $GREEN);
+$catalog->writeHTMLCell(190, 25, 13, 38, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
 
 // ART
 /*
@@ -74,18 +83,24 @@ $catalog->writeHTMLCell(190, 40, 13, 13, '<h1>ART &amp; DESIGN FOR PALESTINE</h1
         )
 
 */
-foreach ($art as $artwork) {
-    $catalog->AddPage();
-    $work = strtoupper($artwork['Werk']);
-    $artist = $artwork['KunstDesigner'];
-    $catalog->writeHTML("<h1>{$work}</h1>");
-    $catalog->writeHTML("<h1>{$artist}</h1>");
-    if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
-    if (is_array($artwork['im']))  foreach ($artwork['im'] as $pic => $image) {
-        // $catalog->writeHTML("<p>{$image}</p>");
-        // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', ['LT' => ['width'=>2,'color'=>[255,0,0]]], 'CM');
-        // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', 0, 'CM');
-        $catalog->Image($image, null, null, 100, 100, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
+
+if (true) {
+    foreach ($art as $artwork) {
+        $catalog->AddPage();
+        $work = strtoupper($artwork['Werk']);
+        $artist = $artwork['KunstDesigner'];
+        $catalog->setColorArray('text', $RED);
+        $catalog->writeHTML("<h1 style=\"font-size: 250%\">{$work}</h1>");
+        $catalog->setColorArray('text', $GREEN);
+        $catalog->writeHTML("<h1>{$artist}</h1>");
+        $catalog->setColorArray('text', $BLACK);
+        if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
+        if (is_array($artwork['im']))  foreach ($artwork['im'] as $pic => $image) {
+            // $catalog->writeHTML("<p>{$image}</p>");
+            // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', ['LT' => ['width'=>2,'color'=>[255,0,0]]], 'CM');
+            // $catalog->Image($image, null, null, 100, 100, '', '', '', 2, 150, '', '', '', 0, 'CM');
+            $catalog->Image($image, null, null, 100, 100, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
+        }
     }
 }
 
