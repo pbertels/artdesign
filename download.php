@@ -4,6 +4,9 @@ use ArtDesign\PdfCatalog;
 
 require __DIR__ . '/vendor/autoload.php';
 
+// TYPE
+$TYPE = isset($_GET['type']) && in_array($_GET['type'], ['binnenwerk', 'kaft']) ? $_GET['type'] : 'binnenwerk';
+
 // FIND IMAGES
 $images = [];
 foreach (glob('./images/*.jpg') as $filename) {
@@ -41,8 +44,9 @@ while (!feof($fp)) {
 }
 fclose($fp);
 
-// // TEST
-// echo "<pre>" . count($art) . print_r($art, true) . '</pre>';
+// SORTEREN
+array_multisort(array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'KunstDesigner'), SORT_ASC, $art);
+// echo '<pre>' . print_r($art, true) . '</pre>';
 // exit;
 
 
@@ -50,43 +54,54 @@ fclose($fp);
 $RED = [235, 90, 60];
 $GREEN = [80, 127, 35];
 $BLACK = [0, 0, 0];
+$WHITE = [255, 255, 255];
+$SIZE = 214;
+$MARGIN = 15;
+$GUTTER = 30;
+$WIDTH = $SIZE - 2 * $MARGIN - $GUTTER;
+$leftODD = $MARGIN + $GUTTER;
+$leftEVEN = $MARGIN;
+$SPACER = 10;
+$timestamp = date('Ymd-Hi');
 
-// CREATE PDF
-$catalog = new PdfCatalog();
-$catalog->setFont('anton', '', 10);
-$catalog->AddPage();
-// $catalog->Rect(0, 0, 216, 216, 'F', [], $DARK);
-$catalog->setColorArray('text', $RED);
-// $catalog->writeHTMLCell(190, 10, 13, 13, '<h1 style="color: rgb(235,90,56)">ART &amp; DESIGN</h1>', 'LTRB', 1, false, true, 'C', false);
-$catalog->writeHTMLCell(190, 25, 13, 13, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
-$catalog->setColorArray('text', $GREEN);
-$catalog->writeHTMLCell(190, 25, 13, 38, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
+// CREATE PDF of RIGHT TYPE
+if ($TYPE != '') {
+    $catalog = new PdfCatalog($SIZE, $SIZE);
+    $catalog->SetMargins($MARGIN, $MARGIN, null, true);
+    $catalog->SetBooklet(true, $MARGIN, $MARGIN + $GUTTER);
+    // $catalog->setFont('anton', '', 10);
+    // $catalog->AddPage();
+    // $catalog->setColorArray('text', $RED);
+    // $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
+    // $catalog->setColorArray('text', $GREEN);
+    // $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 25, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
 
-// ART
-/*
- [mgoossens1] => Array
-        (
-            [KunstDesigner] => Mario Goossens en Nathalie Sternotte
-            [Schenker] => idem
-            [BioBewerkt] => Dit boek is een samenwerking tussen Mario Goossens en Nathalie Sternotte.  Mario is een muzikaal multitalent, vooral bekend als drummer van Triggerfinger en als vaste waarde bij onder meer Bazart, Hooverphonic en Monza. Een Limburgse vijftiger die de wereld rondtrok en overal klank en ritme vond.  Nathalie is graficus met een frisse, eigenzinnige blik: ze zoekt geen standaardoplossingen. Haar creativiteit zit vaak in de uitvoering—precies, tactiel, doordacht—maar gaat moeiteloos hand in hand met sterke beeldvorming.
-            [Werk] => Detailed drumlines
-            [OverWerk] => Detailed drumlines is een creative benadering van een klassiek drumboek. Niet enkel de inhoud maar vooral de vormgeving telt. Elk nummer heeft zijn eigen verhaal, elk verhaal heeft zijn eigen visuele voorstelling. Hett is geen drumboek maar een doosje met waardepapieren. Aan jou om het esthetisch of praktisch te gebruiken.
-            [BioOrigineel] => Dit boek is een samenwerking tussen Mario Goossens en Nathalie Sternotte. Mario is een muzikaal multitalent, vooral bekend als drummer van Triggerfinger en als vaste waarde bij onder meer Bazart, Hooverphonic en Monza. Een Limburgse vijftiger die de wereld rondtrok en overal klank en ritme vond. Nathalie is graficus met een frisse, eigenzinnige blik: ze zoekt geen standaardoplossingen. Haar creativiteit zit vaak in de uitvoering—precies, tactiel, doordacht—maar gaat moeiteloos hand in hand met sterke beeldvorming.
-            [Prijs] => 50€
-            [Formaat] => 250 mm breed x 350 mm hoog x 40 mm diep
-            [Code] => mgoossens1
-            [im] => Array
-                (
-                    [a] => ./images/mgoossens1a.jpg
-                    [b] => ./images/mgoossens1b.jpg
-                )
+    $catalog->AddSectionPage('Voorwoord', $RED, $WHITE, $WIDTH, $leftODD);
+    $catalog->AddSectionPage('', $RED, $WHITE, $WIDTH, $leftODD);
+    $catalog->AddPage();
+    $catalog->setFont('anton', '', 10);
+    $catalog->setColorArray('text', $RED);
+    $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN, '<h1 style="font-size: 350%">VOORWOORD</h1>', 0, 1, false, true, 'R');
+    $catalog->setColorArray('text', $BLACK);
+    $catalog->setFont('helvetica', '', 11);
+    $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 25, "
+        <p></p>
+        <p>Hier komt het voorwoord......</p>
+        <p></p>
+        <p>het Art & Design for Palestine-team,<br/>Fred, Evelyn, Peter, Pieter, Dotje en Jasmien</p>");
 
-        )
-
-*/
-
-if (true) {
+    // ART
+    $prev = 'brol';
+    $section = 0;
     foreach ($art as $code => $artwork) {
+        $split = explode('/', $artwork['TYPE'] . 'Onduidelijk / Onduidelijk');
+        $t = $split[0];
+        if ($t != $prev) {
+            $section++;
+            $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+            $catalog->AddSectionPage($t, $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+            $prev = $t;
+        }
         $catalog->AddPage();
         $catalog->setFont('anton', '', 10);
         $work = strtoupper($artwork['Werk']);
@@ -96,41 +111,62 @@ if (true) {
         $catalog->setColorArray('text', $GREEN);
         $catalog->writeHTML("<h1>{$artist}</h1>");
         $catalog->setColorArray('text', $BLACK);
-        $catalog->setFont('helvetica', '', 10);
+        $catalog->setFont('helvetica', '', 11);
         if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
 
         $catalog->setFont('anton', '', 10);
         $catalog->writeHTML("<p></p><h3>Over het werk</h3>");
-        $catalog->setFont('helvetica', '', 10);
+        $catalog->setFont('helvetica', '', 11);
         $catalog->writeHTML("<p>{$artwork['OverWerk']}</p><p></p>");
 
         $catalog->setFont('anton', '', 10);
         $catalog->writeHTML("<h3>Biografie {$artist}</h3>");
         $bio = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
-        $catalog->setFont('helvetica', '', 10);
+        $catalog->setFont('helvetica', '', 11);
         $catalog->writeHTML("<p>{$bio}</p>");
 
         $catalog->AddPage();
         if (is_array($artwork['im'])) {
             $count = count($artwork['im']);
             if ($count > 0) {
-                $x = 23;
-                $spacer = 10;
-                $width = (180 - ($count-1)*$spacer) / $count;
+                $x = $leftODD;
+                $width = ($WIDTH - ($count - 1) * $SPACER) / $count;
                 foreach ($artwork['im'] as $pic => $image) {
-                    // echo "<pre>{$artist} - {$count} - {$x} {$width}</pre>";
-                    // $catalog->Image($image, $x, 13, $width, 180, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
-                    $catalog->Image($image, $x, 13, $width, 0); //, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
-                    $x += $width + $spacer;
+                    $catalog->Image($image, $x, $MARGIN, $width, 0); //, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
+                    $x += $width + $SPACER;
                 }
             } else {
-                $catalog->Rect(23, 13, 180, 180, 'F', [], substr($code, 0, 5) == 'opgev' ? $GREEN : $RED);
+                $catalog->Rect($leftODD, $MARGIN, $WIDTH, $WIDTH, 'F', [], substr($code, 0, 5) == 'opgev' ? $GREEN : $RED);
             }
         }
     }
+    while ($catalog->getNumPages() % 4 != 0) {
+        $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
+    }
 }
-// exit;
 
-// OUTPUT
-$timestamp = date('Ymd-Hi');
-$catalog->output("catalog-{$timestamp}.pdf");
+if ($TYPE == 'binnenwerk') {
+    $catalog->output("catalog-{$timestamp}.pdf");
+} else if ($TYPE == 'kaft') {
+    $THICKNESS = (2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20);
+    $COVER = 2 * $SIZE + $THICKNESS;
+    $kaft = new PdfCatalog($COVER, $SIZE);
+    $kaft->setFont('anton', '', 10);
+    
+    $kaft->AddPage();
+    $kaft->setColorArray('text', $RED);
+    $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $MARGIN, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
+    $kaft->setColorArray('text', $GREEN);
+    $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $MARGIN + 25, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
+    $kaft->setColorArray('text', $BLACK);
+    $kaft->setFont('helvetica', '', 18);
+    $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $SIZE/2, "<p>{$COVER} mm x {$SIZE} mm</p>", 0, 1, false, true, 'C', false);
+    
+    $kaft->Rect($SIZE, 0, $THICKNESS, $SIZE, 'F', [], $BLACK);
+    
+    $kaft->AddPage();
+    $kaft->Rect(0, 0, $SIZE + $THICKNESS/2, $SIZE, 'F', [], $RED);
+    $kaft->Rect($SIZE + $THICKNESS/2, 0, $SIZE + $THICKNESS/2, $SIZE, 'F', [], $GREEN);
+
+    $kaft->output("cover-{$timestamp}.pdf");
+}
