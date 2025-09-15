@@ -12,8 +12,8 @@ class PdfCatalog extends \TCPDF
         parent::__construct('P', 'mm', [216,216], true, 'UTF-8', false, true);
         $this->SetDisplayMode($zoom = 'fullpage', $layout = 'TwoColumnRight', $mode = 'UseNone');
         $this->setViewerPreferences(array('Duplex' => 'DuplexFlipLongEdge'));
-        $this->SetMargins(0, 0, 0, true);
-        $this->SetBooklet(true, 0, 0);
+        $this->SetMargins(13, 13, null, true);
+        $this->SetBooklet(true, 13, 23);
     }
     public function Header() {}
     public function Footer() {}

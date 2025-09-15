@@ -113,18 +113,23 @@ if (true) {
         $catalog->AddPage();
         if (is_array($artwork['im'])) {
             $count = count($artwork['im']);
-            // echo "<pre>{$artist} - {$count}</pre>";
             if ($count > 0) {
+                $x = 23;
+                $spacer = 10;
+                $width = 180 / $count - $spacer;
                 foreach ($artwork['im'] as $pic => $image) {
-                    $catalog->Image($image, 25, 25, 166, 166, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
-                    // $catalog->Image($image, 0, 0, 216, 216, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
+                    // echo "<pre>{$artist} - {$count} - {$x} {$width}</pre>";
+                    // $catalog->Image($image, $x, 13, $width, 180, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
+                    $catalog->Image($image, $x, 13, $width, 0); //, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
+                    $x += $width + $spacer;
                 }
             } else {
-                $catalog->Rect(50, 50, 116, 116, 'F', [], substr($code, 0, 5) == 'opgev' ? $GREEN : $RED);
+                $catalog->Rect(23, 13, 180, 180, 'F', [], substr($code, 0, 5) == 'opgev' ? $GREEN : $RED);
             }
         }
     }
 }
+// exit;
 
 // OUTPUT
 $timestamp = date('Ymd-Hi');
