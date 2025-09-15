@@ -116,7 +116,7 @@ if (true) {
             if ($count > 0) {
                 $x = 23;
                 $spacer = 10;
-                $width = 180 / $count - $spacer;
+                $width = (180 - ($count-1)*$spacer) / $count;
                 foreach ($artwork['im'] as $pic => $image) {
                     // echo "<pre>{$artist} - {$count} - {$x} {$width}</pre>";
                     // $catalog->Image($image, $x, 13, $width, 180, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
