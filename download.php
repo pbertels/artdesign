@@ -34,7 +34,7 @@ while (!feof($fp)) {
             $record[$header[$index]] = trim($value);
         }
         $code = $record['Code'];
-        if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = count($art);
+        if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = strtolower($code) . count($art);
         $record['im'] = isset($images[$code]) ? $images[$code] : [];
         $art[$code] = $record;
     }
@@ -86,7 +86,7 @@ $catalog->writeHTMLCell(190, 25, 13, 38, '<h1 style="font-size: 645%">FOR PALEST
 */
 
 if (true) {
-    foreach ($art as $artwork) {
+    foreach ($art as $code => $artwork) {
         $catalog->AddPage();
         $catalog->setFont('anton', '', 10);
         $work = strtoupper($artwork['Werk']);
@@ -110,15 +110,19 @@ if (true) {
         $catalog->setFont('helvetica', '', 10);
         $catalog->writeHTML("<p>{$bio}</p>");
 
-        if (!is_array($artwork['im'])) continue;
         $catalog->AddPage();
-        $count = count($artwork['im']);
-        foreach ($artwork['im'] as $pic => $image) {
-            $catalog->Image($image, 0, 0, 216, 216, '', '', '', true, 600, 'C', false, false, 0, 'CB', false, false, false);
-            // $catalog->Image($image, 0, 0, 216, 216, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
+        if (is_array($artwork['im'])) {
+            $count = count($artwork['im']);
+            // echo "<pre>{$artist} - {$count}</pre>";
+            if ($count > 0) {
+                foreach ($artwork['im'] as $pic => $image) {
+                    $catalog->Image($image, 25, 25, 166, 166, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
+                    // $catalog->Image($image, 0, 0, 216, 216, '', '', '', true, 600, 'C', false, false, 0, true, false, true, false);
+                }
+            } else {
+                $catalog->Rect(50, 50, 116, 116, 'F', [], substr($code, 0, 5) == 'opgev' ? $GREEN : $RED);
+            }
         }
-
-
     }
 }
 
