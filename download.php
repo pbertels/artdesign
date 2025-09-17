@@ -94,8 +94,7 @@ if ($TYPE != '') {
     $prev = 'brol';
     $section = 0;
     foreach ($art as $code => $artwork) {
-        $split = explode('/', $artwork['TYPE'] . 'Onduidelijk / Onduidelijk');
-        $t = $split[0];
+        $t = $artwork['TYPE'] != '' ? str_replace(['KLIEF', '...'], ['K- LIEF', ''], strtoupper($artwork['TYPE'])) : 'TE BEKIJKEN...';
         if ($t != $prev) {
             $section++;
             $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
