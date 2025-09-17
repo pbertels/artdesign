@@ -55,7 +55,8 @@ $RED = [235, 90, 60];
 $GREEN = [80, 127, 35];
 $BLACK = [0, 0, 0];
 $WHITE = [255, 255, 255];
-$SIZE = 214;
+$BLEED = 2;
+$SIZE = 210 + 2 * $BLEED;
 $MARGIN = 15;
 $GUTTER = 30;
 $WIDTH = $SIZE - 2 * $MARGIN - $GUTTER;
@@ -148,10 +149,10 @@ if ($TYPE == 'binnenwerk') {
     $catalog->output("catalog-{$timestamp}.pdf");
 } else if ($TYPE == 'kaft') {
     $THICKNESS = (2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20);
-    $COVER = 2 * $SIZE + $THICKNESS;
+    $COVER = 2 * $SIZE + $THICKNESS - 2 * $BLEED;
     $kaft = new PdfCatalog($COVER, $SIZE);
     $kaft->setFont('anton', '', 10);
-    
+
     $kaft->AddPage();
     $kaft->setColorArray('text', $RED);
     $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $MARGIN, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
@@ -159,13 +160,13 @@ if ($TYPE == 'binnenwerk') {
     $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $MARGIN + 25, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
     $kaft->setColorArray('text', $BLACK);
     $kaft->setFont('helvetica', '', 18);
-    $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $SIZE/2, "<p>{$COVER} mm x {$SIZE} mm</p>", 0, 1, false, true, 'C', false);
-    
+    $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $SIZE / 2, "<p>{$COVER} mm x {$SIZE} mm</p>", 0, 1, false, true, 'C', false);
+
     $kaft->Rect($SIZE, 0, $THICKNESS, $SIZE, 'F', [], $BLACK);
-    
+
     $kaft->AddPage();
-    $kaft->Rect(0, 0, $SIZE + $THICKNESS/2, $SIZE, 'F', [], $RED);
-    $kaft->Rect($SIZE + $THICKNESS/2, 0, $SIZE + $THICKNESS/2, $SIZE, 'F', [], $GREEN);
+    $kaft->Rect(0, 0, $SIZE + $THICKNESS / 2, $SIZE, 'F', [], $RED);
+    $kaft->Rect($SIZE + $THICKNESS / 2, 0, $SIZE + $THICKNESS / 2, $SIZE, 'F', [], $GREEN);
 
     $kaft->output("cover-{$timestamp}.pdf");
 }

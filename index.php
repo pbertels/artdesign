@@ -18,4 +18,4 @@ body {
 }
 </style>';
 echo '<h1>Art &amp; Design for Palestine</h1>';
-echo '<p>Caalogus (in PDF): <a href="./download.php?type=binnenwerk">binnenwerk</a> en <a href="./download.php?type=kaft">kaft</a></p>';
+echo '<p>Caalogus (<strong>work in progress</strong>): <a href="./download.php?type=binnenwerk">binnenwerk</a> en <a href="./download.php?type=kaft">kaft</a></p>';
