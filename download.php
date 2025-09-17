@@ -45,7 +45,7 @@ while (!feof($fp)) {
 fclose($fp);
 
 // SORTEREN
-array_multisort(array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'KunstDesigner'), SORT_ASC, $art);
+array_multisort(array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, array_column($art, 'KunstDesigner'), SORT_ASC, $art);
 // echo '<pre>' . print_r($art, true) . '</pre>';
 // exit;
 
@@ -77,6 +77,10 @@ if ($TYPE != '') {
     // $catalog->setColorArray('text', $GREEN);
     // $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 25, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
 
+    // PREFACE
+    $afronden = ((count($art)-count($art)%10)/10);
+    $cijfers = ['nul', 'tien', 'twintig', 'dertig', 'veertig', 'vijftig', 'zestig', 'zeventig', 'tachtig', 'negentig', 'honderd', 'honderdentien'];
+    $AANTAL = $cijfers[$afronden];
     $catalog->AddSectionPage('Voorwoord', $RED, $WHITE, $WIDTH, $leftODD);
     $catalog->AddSectionPage('', $RED, $WHITE, $WIDTH, $leftODD);
     $catalog->AddPage();
@@ -85,13 +89,11 @@ if ($TYPE != '') {
     $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN, '<h1 style="font-size: 500%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'L', false);
     $catalog->setColorArray('text', $GREEN);
     $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 18, '<h1 style="font-size: 450%">FOR PALESTINE</h1>', 0, 1, false, true, 'L', false);
-
-    // $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN, '<h1 style="font-size: 350%">VOORWOORD</h1>', 0, 1, false, true, 'R');
     $catalog->setColorArray('text', $BLACK);
     $catalog->setFont('helvetica', '', 11);
     $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 40, "
 <p></p>
-<p>Meer dan vijftig kunstenaars en designers schonken hun werk voor deze veiling: schilderijen, beelden en designobjecten die samen een uniek en divers geheel vormen. Elk stuk is niet alleen een uitdrukking van creativiteit, maar ook van solidariteit.</p>
+<p>Meer dan {$AANTAL} kunstenaars en designers schonken hun werk voor deze veiling: schilderijen, beelden en designobjecten die samen een uniek en divers geheel vormen. Elk stuk is niet alleen een uitdrukking van creativiteit, maar ook van solidariteit.</p>
 <p>De opbrengst gaat integraal naar het Rode Kruis, Oxfam en UNWRA. Drie organisaties die dagelijks verschil maken, en die we met dit initiatief extra willen ondersteunen. Uw aanwezigheid en biedingen zorgen ervoor dat kunst hier méér wordt dan bewondering alleen: ze wordt een daad van verbondenheid.</p>
 <p>Onze dank gaat ook uit naar onze sponsors: XX, XX en XX. Dankzij hun steun kunnen we dit evenement niet alleen mogelijk maken, maar ook aangenaam, feestelijk en net iets minder dorstig.</p>
 <p>Blader gerust, kies met uw hart, en laat u meeslepen door de energie van de veiling. Want uiteindelijk wint niet enkel de hoogste bieder, maar vooral de mensen en doelen die we samen een stap vooruit helpen.</p>
@@ -151,6 +153,44 @@ if ($TYPE != '') {
             }
         }
     }
+
+    // SUMMARY
+    $catalog->AddSectionPage('', $RED, $WHITE, $WIDTH, $leftODD);
+    $catalog->AddSectionPage('Overzicht van alle loten', $RED, $WHITE, $WIDTH, $leftODD);
+    $table = [];
+    $i = 1;
+    foreach ($art as $code => $artwork) {
+        $artist = $artwork['KunstDesigner'];
+        $work = $artwork['Werk'];
+        $price = preg_replace('/[^0-9]/', '', $artwork['Prijs']);
+        $number = substr('0000' . ($i++), -3, 3);
+        $row = '<tr>';
+        $row .= "<td width=\"2cm\" style=\"text-align: left\">{$number}</td>";
+        $row .= "<td width=\"6cm\" style=\"text-align: left\">{$artist}</td>";
+        $row .= "<td width=\"7cm\" style=\"text-align: left\">{$work}</td>";
+        $row .= "<td width=\"2.5cm\" style=\"text-align: right\">&euro; {$price}</td>";
+        $row .= '</tr>';
+        $table[] = $row;
+    }
+    $header = '<tr style="font-weight: bold">';
+    $header .= "<td width=\"2cm\" style=\"text-align: left\">Nummer</td>";
+    $header .= "<td width=\"6cm\" style=\"text-align: left\">Kunstenaar / ontwerper</td>";
+    $header .= "<td width=\"7cm\" style=\"text-align: left\">Titel of omschrijving van het item</td>";
+    $header .= "<td width=\"2.5cm\" style=\"text-align: right\">Prijs</td>";
+    $header .= '</tr>';
+    $catalog->setColorArray('text', $BLACK);
+    $step = 33;
+    for ($i = 0; $i < count($table); $i += $step) {
+        $catalog->AddPage();
+        $catalog->setFont('anton', '', 11);
+        $html = '<table>' . $header . '</table>';
+        $catalog->writeHTML($html);
+        $catalog->setFont('helvetica', '', 11);
+        $html = '<table>' . implode('', array_slice($table, $i, $step)) . '</table>';
+        $catalog->writeHTML($html);
+    }
+
+    // EXTRA PAGES
     while ($catalog->getNumPages() % 4 != 0) {
         $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
     }
