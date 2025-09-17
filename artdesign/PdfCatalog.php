@@ -32,6 +32,6 @@ class PdfCatalog extends \TCPDF
         $this->Rect(0, 0, $this->wq, $this->hq, 'F', [], $colour);
         $this->setTextColorArray($textColour);
         $titleUpper = strtoupper($title);
-        $this->writeHTMLCell($width, 0, $leftOdd, $this->hq * 0.5, "<h1 style=\"font-size: 700%\">{$titleUpper}</h1>", 0, 1, false, true, 'R', false);
+        $this->writeHTMLCell($width, 0, $leftOdd, $this->hq * 0.5, "<h1 style=\"font-size: 600%\">{$titleUpper}</h1>", 0, 1, false, true, 'R', false);
     }
 }
