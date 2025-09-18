@@ -1,5 +1,6 @@
 <?php
 
+ini_set("memory_limit", -1);
 use ArtDesign\PdfCatalog;
 
 require __DIR__ . '/vendor/autoload.php';
@@ -199,7 +200,7 @@ if ($TYPE != '') {
 if ($TYPE == 'binnenwerk') {
     $catalog->output("catalog-{$timestamp}.pdf");
 } else if ($TYPE == 'kaft') {
-    $THICKNESS = (2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20);
+    $THICKNESS = (round(((2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20)) / 2) + 1) * 0.5;
     $COVER = 2 * $SIZE + $THICKNESS - 2 * $BLEED;
     $kaft = new PdfCatalog($COVER, $SIZE);
     $kaft->setFont('anton', '', 10);
@@ -216,8 +217,8 @@ if ($TYPE == 'binnenwerk') {
     $kaft->Rect($SIZE, 0, $THICKNESS, $SIZE, 'F', [], $BLACK);
 
     $kaft->AddPage();
-    $kaft->Rect(0, 0, $SIZE + $THICKNESS / 2, $SIZE, 'F', [], $RED);
-    $kaft->Rect($SIZE + $THICKNESS / 2, 0, $SIZE + $THICKNESS / 2, $SIZE, 'F', [], $GREEN);
+    $kaft->Rect(0, 0, $SIZE - 4/*+ $THICKNESS / 2*/, $SIZE, 'F', [], $RED);
+    $kaft->Rect($SIZE + $THICKNESS + 4, 0, $SIZE - 4, $SIZE, 'F', [], $GREEN);
 
     $kaft->output("cover-{$timestamp}.pdf");
 }
