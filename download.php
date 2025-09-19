@@ -4,6 +4,7 @@ ini_set("memory_limit", -1);
 use ArtDesign\PdfCatalog;
 
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/sponsors.php';
 
 // TYPE
 $TYPE = isset($_GET['type']) && in_array($_GET['type'], ['binnenwerk', 'kaft']) ? $_GET['type'] : 'binnenwerk';
@@ -96,7 +97,7 @@ if ($TYPE != '') {
 <p></p>
 <p>Meer dan {$AANTAL} kunstenaars en designers schonken hun werk voor deze veiling: schilderijen, beelden en designobjecten die samen een uniek en divers geheel vormen. Elk stuk is niet alleen een uitdrukking van creativiteit, maar ook van solidariteit.</p>
 <p>De opbrengst gaat integraal naar het Rode Kruis, Oxfam en UNWRA. Drie organisaties die dagelijks verschil maken, en die we met dit initiatief extra willen ondersteunen. Uw aanwezigheid en biedingen zorgen ervoor dat kunst hier méér wordt dan bewondering alleen: ze wordt een daad van verbondenheid.</p>
-<p>Onze dank gaat ook uit naar onze sponsors: XX, XX en XX. Dankzij hun steun kunnen we dit evenement niet alleen mogelijk maken, maar ook aangenaam, feestelijk en net iets minder dorstig.</p>
+<p>Onze dank gaat ook uit naar onze sponsors: {$SPONSORLIST}. Dankzij hun steun kunnen we dit evenement niet alleen mogelijk maken, maar ook aangenaam, feestelijk en net iets minder dorstig.</p>
 <p>Blader gerust, kies met uw hart, en laat u meeslepen door de energie van de veiling. Want uiteindelijk wint niet enkel de hoogste bieder, maar vooral de mensen en doelen die we samen een stap vooruit helpen.</p>
 <p></p>
 <p>Waar kunst en solidariteit elkaar raken, ontstaat hoop.</p>
