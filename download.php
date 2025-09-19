@@ -1,6 +1,7 @@
 <?php
 
 ini_set("memory_limit", -1);
+
 use ArtDesign\PdfCatalog;
 
 require __DIR__ . '/vendor/autoload.php';
@@ -21,6 +22,10 @@ foreach (glob('./images/*.jpg') as $filename) {
         $code = $name;
         $pic = 'u';
     }
+    $temp = substr($name, 0, 1) == '_';
+    if ($temp) {
+        $pic = 'TEMP';
+    }
     if (!isset($images[$code])) $images[$code] = [];
     $images[$code][$pic] = $filename;
 }
@@ -36,7 +41,7 @@ while (!feof($fp)) {
         $header = $data;
     } else {
         foreach ($data as $index => $value) {
-            $record[$header[$index]] = trim($value);
+            $record[$header[$index]] = str_replace("\n", "</p><p>", trim($value));
         }
         $code = $record['Code'];
         if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = strtolower($code) . count($art);
@@ -55,6 +60,7 @@ array_multisort(array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'Prijs'
 // DEFINITIONS
 $RED = [235, 90, 60];
 $GREEN = [80, 127, 35];
+$BLUE = [0, 0, 255];
 $BLACK = [0, 0, 0];
 $WHITE = [255, 255, 255];
 $BLEED = 2;
@@ -80,7 +86,7 @@ if ($TYPE != '') {
     // $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 25, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
 
     // PREFACE
-    $afronden = ((count($art)-count($art)%10)/10);
+    $afronden = ((count($art) - count($art) % 10) / 10);
     $cijfers = ['nul', 'tien', 'twintig', 'dertig', 'veertig', 'vijftig', 'zestig', 'zeventig', 'tachtig', 'negentig', 'honderd', 'honderdentien'];
     $AANTAL = $cijfers[$afronden];
     $catalog->AddSectionPage('Voorwoord', $RED, $WHITE, $WIDTH, $leftODD);
@@ -147,7 +153,12 @@ if ($TYPE != '') {
                 $x = $leftODD;
                 $width = ($WIDTH - ($count - 1) * $SPACER) / $count;
                 foreach ($artwork['im'] as $pic => $image) {
-                    $catalog->Image($image, $x, $MARGIN, $width, 0); //, '', '', '', true, 600, 'C', false, false, 0, 'CM', false, false, false);
+                    if ($pic == 'TEMP') {
+                        $catalog->Rect($x, $MARGIN, $width, $width, 'F', [], $BLUE);
+                        $catalog->Image($image, $x + 10, $MARGIN + 10, $width - 20, 0);
+                    } else {
+                        $catalog->Image($image, $x, $MARGIN, $width, 0);
+                    }
                     $x += $width + $SPACER;
                 }
             } else {
