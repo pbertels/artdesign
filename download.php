@@ -41,7 +41,7 @@ while (!feof($fp)) {
         $header = $data;
     } else {
         foreach ($data as $index => $value) {
-            $record[$header[$index]] = str_replace("\n", "</p><p>", trim($value));
+            $record[$header[$index]] = preg_replace('/[\s]*\$\$\$\$[\s]*/', "</p><p>", trim($value));
         }
         $code = $record['Code'];
         if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = strtolower($code) . count($art);
@@ -126,6 +126,7 @@ if ($TYPE != '') {
         $catalog->AddPage();
         $catalog->setFont('anton', '', 10);
         $work = strtoupper($artwork['Werk']);
+        $work = str_replace(['é', 'â'], ['E','A'], $work);
         $artist = $artwork['KunstDesigner'];
         $catalog->setColorArray('text', $RED);
         $catalog->writeHTML("<h1 style=\"font-size: 250%\">{$work}</h1>");
@@ -137,14 +138,25 @@ if ($TYPE != '') {
 
         $catalog->setFont('anton', '', 10);
         $catalog->writeHTML("<p></p><h3>Over het werk</h3>");
+        $catalog->Ln(1.5);
         $catalog->setFont('helvetica', '', 11);
-        $catalog->writeHTML("<p>{$artwork['OverWerk']}</p><p></p>");
+        foreach (explode('</p><p>', $artwork['OverWerk']) as $part) {
+            $catalog->writeHTML("<p>{$part}</p>");
+            $catalog->Ln(1.5);
+        }
+        $catalog->Ln(3.5);
 
         $catalog->setFont('anton', '', 10);
         $catalog->writeHTML("<h3>Biografie {$artist}</h3>");
+        $catalog->Ln(1.5);
         $bio = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
         $catalog->setFont('helvetica', '', 11);
-        $catalog->writeHTML("<p>{$bio}</p>");
+        $catalog->setColorArray('text', substr($bio, 0, 1) == '_' ? $RED : $BLACK);
+        foreach (explode('</p><p>', $bio) as $part) {
+            $catalog->writeHTML("<p>{$part}</p>");
+            $catalog->Ln(1.5);
+        }
+        $catalog->setColorArray('text', $BLACK);
 
         $catalog->AddPage();
         if (is_array($artwork['im'])) {
@@ -192,7 +204,7 @@ if ($TYPE != '') {
     $header .= "<td width=\"2.5cm\" style=\"text-align: right\">Prijs</td>";
     $header .= '</tr>';
     $catalog->setColorArray('text', $BLACK);
-    $step = 33;
+    $step = 30;
     for ($i = 0; $i < count($table); $i += $step) {
         $catalog->AddPage();
         $catalog->setFont('anton', '', 11);
