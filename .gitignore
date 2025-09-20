@@ -1,6 +1,7 @@
 # general
 .env
 .DS_Store
+update.sh
 
 # PHP composer
 composer.lock
