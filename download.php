@@ -109,7 +109,7 @@ if ($TYPE != '') {
 <p>Waar kunst en solidariteit elkaar raken, ontstaat hoop.</p>
 <p></p>
 <p>Met warmte en dankbaarheid,</p>
-<p>Fred, Evelyn, Peter, Pieter, Dotje & Jasmien</p>
+<p>Fred, Evelyn, Peter, Pieter & Jasmien</p>
 ");
 
     // ART
@@ -126,7 +126,7 @@ if ($TYPE != '') {
         $catalog->AddPage();
         $catalog->setFont('anton', '', 10);
         $work = strtoupper($artwork['Werk']);
-        $work = str_replace(['é', 'â'], ['E','A'], $work);
+        $work = str_replace(['é', 'â'], ['E', 'A'], $work);
         $artist = $artwork['KunstDesigner'];
         $catalog->setColorArray('text', $RED);
         $catalog->writeHTML("<h1 style=\"font-size: 250%\">{$work}</h1>");
@@ -229,6 +229,7 @@ if ($TYPE == 'binnenwerk') {
     $kaft = new PdfCatalog($COVER, $SIZE);
     $kaft->setFont('anton', '', 10);
 
+    // front
     $kaft->AddPage();
     $kaft->setColorArray('text', $RED);
     $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $MARGIN, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
@@ -238,8 +239,34 @@ if ($TYPE == 'binnenwerk') {
     $kaft->setFont('helvetica', '', 18);
     $kaft->writeHTMLCell($WIDTH, 25, $SIZE + $THICKNESS + $leftODD, $SIZE / 2, "<p>{$COVER} mm x {$SIZE} mm</p>", 0, 1, false, true, 'C', false);
 
-    $kaft->Rect($SIZE, 0, $THICKNESS, $SIZE, 'F', [], $BLACK);
+    // rug
+    // $kaft->Rect($SIZE, 0, $THICKNESS, $SIZE, 'F', [], $BLACK);
 
+    // back
+    $i = 0;
+    $y = $MARGIN + 25;
+    $ROW = 4;
+    $sponsorWIDTH = $WIDTH / $ROW - $SPACER;
+    $sponsorHEIGHT = 90 / 120 * $sponsorWIDTH;
+    $sponsorPITCH = $WIDTH / $ROW;
+    $sponsorLEFT = $leftEVEN;
+    $x = $sponsorLEFT;
+    $kaft->setFont('helvetica', '', 8);
+    foreach ($SPONSORS as $code => $sponsor) {
+        $logo = "./sponsors/{$code}.png";
+        if (file_exists($logo)) {
+            $kaft->Image($logo, $x, $y, $sponsorWIDTH, 0);
+        } else {
+            $kaft->writeHTMLCell($sponsorWIDTH, $sponsorHEIGHT, $x, $y, "<p>{$sponsor['name']}</p>", 1, 1, false, true, 'C', false);
+        }
+        $x += $sponsorPITCH;
+        if ($x > $WIDTH) {
+            $x = $sponsorLEFT;
+            $y += $sponsorHEIGHT + $SPACER;
+        }
+    }
+
+    // inside
     $kaft->AddPage();
     $kaft->Rect(0, 0, $SIZE - 4/*+ $THICKNESS / 2*/, $SIZE, 'F', [], $RED);
     $kaft->Rect($SIZE + $THICKNESS + 4, 0, $SIZE - 4, $SIZE, 'F', [], $GREEN);

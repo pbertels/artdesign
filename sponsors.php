@@ -10,7 +10,6 @@ $SPONSORS = [
     'bonheur' => ['name' => 'Bonheur', 'desc' => ''],
     'mortselarij' => ['name' => 'De Mortselarij', 'desc' => ''],
     'rentabar' => ['name' => 'Rentabar', 'desc' => ''],
-    'dot' => ['name' => 'DOT interior concepts', 'desc' => ''],
     // '' => ['name' => '', 'desc' => ''],
 ];
 
