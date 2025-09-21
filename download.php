@@ -41,18 +41,25 @@ while (!feof($fp)) {
         $header = $data;
     } else {
         foreach ($data as $index => $value) {
-            $record[$header[$index]] = preg_replace('/[\s]*\$\$\$\$[\s]*/', "<br>", trim($value));
+            $record[$header[$index]] = preg_replace('/[\s]*\$\$\$[\$]*[\s]*/', "<br>", trim($value));
         }
         $code = $record['Code'];
         if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = strtolower($code) . count($art);
-        $record['im'] = isset($images[$code]) ? $images[$code] : [];
-        $art[$code] = $record;
+        if (isset($images[$code])) {
+            $record['im'] = $images[$code];
+            $record['foto'] = 1;
+        } else {
+            $record['im'] = [];
+            $record['foto'] = 0;
+            $record['TYPE'] = 'FOTO OP TE VRAGEN';
+        }
+        if ($code != '_VERKOOP') $art[$code] = $record;
     }
 }
 fclose($fp);
 
 // SORTEREN
-array_multisort(array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, array_column($art, 'KunstDesigner'), SORT_ASC, $art);
+array_multisort(array_column($art, 'foto'), SORT_ASC, array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, array_column($art, 'KunstDesigner'), SORT_ASC, $art);
 // echo '<pre>' . print_r($art, true) . '</pre>';
 // exit;
 
@@ -250,7 +257,7 @@ if ($TYPE == 'binnenwerk') {
     $sponsorPITCH = $WIDTH / $ROW;
     $sponsorLEFT = $leftEVEN;
     $x = $sponsorLEFT + $SPACER / 2;
-    $y = $WIDTH - (($i-$i%$ROW) / $ROW) * ($sponsorHEIGHT + $SPACER);
+    $y = $WIDTH - (($i - $i % $ROW) / $ROW) * ($sponsorHEIGHT + $SPACER);
     $kaft->setFont('helvetica', '', 8);
     foreach ($SPONSORS as $code => $sponsor) {
         $logo = "./sponsors/{$code}.png";
