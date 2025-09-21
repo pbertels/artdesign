@@ -12,6 +12,7 @@ $SPONSORS = [
     'rentabar' => ['name' => 'Rentabar', 'desc' => ''],
     // '' => ['name' => '', 'desc' => ''],
 ];
+ksort($SPONSORS);
 
 $SPONSORnames = [];
 foreach ($SPONSORS as $code => $sponsor) {

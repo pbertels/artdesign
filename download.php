@@ -41,7 +41,7 @@ while (!feof($fp)) {
         $header = $data;
     } else {
         foreach ($data as $index => $value) {
-            $record[$header[$index]] = preg_replace('/[\s]*\$\$\$\$[\s]*/', "</p><p>", trim($value));
+            $record[$header[$index]] = preg_replace('/[\s]*\$\$\$\$[\s]*/', "<br>", trim($value));
         }
         $code = $record['Code'];
         if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = strtolower($code) . count($art);
@@ -140,7 +140,7 @@ if ($TYPE != '') {
         $catalog->writeHTML("<p></p><h3>Over het werk</h3>");
         $catalog->Ln(1.5);
         $catalog->setFont('helvetica', '', 11);
-        foreach (explode('</p><p>', $artwork['OverWerk']) as $part) {
+        foreach (explode('<br>', $artwork['OverWerk']) as $part) {
             $catalog->writeHTML("<p>{$part}</p>");
             $catalog->Ln(1.5);
         }
@@ -152,7 +152,7 @@ if ($TYPE != '') {
         $bio = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
         $catalog->setFont('helvetica', '', 11);
         $catalog->setColorArray('text', substr($bio, 0, 1) == '_' ? $RED : $BLACK);
-        foreach (explode('</p><p>', $bio) as $part) {
+        foreach (explode('<br>', $bio) as $part) {
             $catalog->writeHTML("<p>{$part}</p>");
             $catalog->Ln(1.5);
         }
@@ -204,7 +204,7 @@ if ($TYPE != '') {
     $header .= "<td width=\"2.5cm\" style=\"text-align: right\">Prijs</td>";
     $header .= '</tr>';
     $catalog->setColorArray('text', $BLACK);
-    $step = 30;
+    $step = 25;
     for ($i = 0; $i < count($table); $i += $step) {
         $catalog->AddPage();
         $catalog->setFont('anton', '', 11);
@@ -243,14 +243,14 @@ if ($TYPE == 'binnenwerk') {
     // $kaft->Rect($SIZE, 0, $THICKNESS, $SIZE, 'F', [], $BLACK);
 
     // back
-    $i = 0;
-    $y = $MARGIN + 25;
-    $ROW = 4;
+    $ROW = 6;
+    $i = count($SPONSORS);
     $sponsorWIDTH = $WIDTH / $ROW - $SPACER;
     $sponsorHEIGHT = 90 / 120 * $sponsorWIDTH;
     $sponsorPITCH = $WIDTH / $ROW;
     $sponsorLEFT = $leftEVEN;
-    $x = $sponsorLEFT;
+    $x = $sponsorLEFT + $SPACER / 2;
+    $y = $WIDTH - (($i-$i%$ROW) / $ROW) * ($sponsorHEIGHT + $SPACER);
     $kaft->setFont('helvetica', '', 8);
     foreach ($SPONSORS as $code => $sponsor) {
         $logo = "./sponsors/{$code}.png";
@@ -259,9 +259,14 @@ if ($TYPE == 'binnenwerk') {
         } else {
             $kaft->writeHTMLCell($sponsorWIDTH, $sponsorHEIGHT, $x, $y, "<p>{$sponsor['name']}</p>", 1, 1, false, true, 'C', false);
         }
+        $i--;
         $x += $sponsorPITCH;
         if ($x > $WIDTH) {
-            $x = $sponsorLEFT;
+            if ($i > $ROW) {
+                $x = $sponsorLEFT + $SPACER / 2;
+            } else {
+                $x = $sponsorLEFT + $SPACER / 2 + ($ROW - $i) * $sponsorPITCH / 2;
+            }
             $y += $sponsorHEIGHT + $SPACER;
         }
     }
