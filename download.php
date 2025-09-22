@@ -164,18 +164,18 @@ if ($TYPE != '') {
             $catalog->writeHTML("<p>{$part}</p>");
             $catalog->Ln(1.5);
         }
+        // practical
         $catalog->setColorArray('text', $BLACK);
         $catalog->setFont('anton', '', 10);
         $FORMATY = $MARGIN + $WIDTH + $SPACER;
         $catalog->setY($FORMATY);
-        $catalog->writeHTML("<h3>Lotnummer</h3>");
-        $catalog->writeHTML("<h3>Formaat</h3>");
-        $catalog->writeHTML("<h3>Prijs</h3>");
+        $catalog->writeHTML("<h3>Lot 1234</h3>");
         $catalog->setFont('helvetica', '', 11);
-        $catalog->writeHTMLCell($WIDTH, 5, $leftEVEN + 22, $FORMATY + 0.5, "<p>1234</p>");
-        $catalog->writeHTMLCell($WIDTH, 5, $leftEVEN + 17, $FORMATY + 5.8, "<p>{$artwork['Formaat']}</p>");
-        $catalog->writeHTMLCell($WIDTH, 5, $leftEVEN + 11, $FORMATY + 5.8 + 5.8, "<p>bieden start vanaf &euro;{$artwork['Prijs']}</p>");
-        $catalog->setColorArray('text', $BLACK);
+        $html = '<p>';
+        if ($artwork['Formaat'] != '') $html .= "Formaat: {$artwork['Formaat']}<br>";
+        $html .= "Prijs: bieden start vanaf {$artwork['Prijs']} &euro;<br>";
+        $html .= '</p>';
+        $catalog->writeHTML($html);
 
         $catalog->AddPage();
         if (is_array($artwork['im'])) {
@@ -184,12 +184,17 @@ if ($TYPE != '') {
                 $x = $leftODD;
                 $width = ($WIDTH - ($count - 1) * $SPACER) / $count;
                 foreach ($artwork['im'] as $pic => $image) {
-                    if ($pic == 'TEMP') {
-                        $catalog->Rect($x, $MARGIN, $width, $width, 'F', [], $BLUE);
-                        $catalog->Image($image, $x + 10, $MARGIN + 10, $width - 20, 0);
-                    } else {
+                    list($orig_W, $orig_H) = getimagesize($image);
+                    if ($orig_W > $orig_H) {
                         $catalog->Image($image, $x, $MARGIN, $width, 0);
+                    } else {
+                        $catalog->Image($image, $x, $MARGIN, 0, $width);
                     }
+                    // if ($pic == 'TEMP') {
+                    //     $catalog->Rect($x, $MARGIN, $width, $width, 'F', [], $BLUE);
+                    //     $catalog->Image($image, $x + 10, $MARGIN + 10, $width - 20, 0);
+                    // } else {
+                    // }
                     $x += $width + $SPACER;
                 }
             } else {
