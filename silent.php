@@ -21,6 +21,7 @@ $MARGIN = 15;
 $WIDTH = $W - 2 * $MARGIN;
 $HEIGHT = $H - 2 * $MARGIN;
 $SPACER = 10;
+$IMAGE = 25;
 $timestamp = date('Ymd-Hi');
 
 $silent = new PdfCatalog($W, $H);
@@ -69,6 +70,19 @@ foreach ($art as $code => $artwork) {
     $silent->writeHTML("<h3>{$artist}</h3>");
     $silent->setColorArray('text', $BLACK);
     $silent->Ln(3);
+
+    // IMAGE
+    if (is_array($artwork['im']) && count($artwork['im']) > 0) {
+        $image = $artwork['im'][array_key_first($artwork['im'])];
+        $x = $MARGIN + $WIDTH - $IMAGE;
+        $width = $IMAGE;
+        list($orig_W, $orig_H) = getimagesize($image);
+        if ($orig_W > $orig_H) {
+            $silent->Image($image, $x, $MARGIN, $width, 0);
+        } else {
+            $silent->Image($image, $x, $MARGIN, 0, $width);
+        }
+    }
 
     // TABLE - print
     $silent->setFont('anton', '', 11);
