@@ -84,6 +84,7 @@ $timestamp = date('Ymd-Hi');
 if ($TYPE != '') {
     $catalog = new PdfCatalog($SIZE, $SIZE);
     $catalog->SetMargins($MARGIN, $MARGIN, null, true);
+    $catalog->SetAutoPageBreak(false);
     $catalog->SetBooklet(true, $MARGIN, $MARGIN + $GUTTER);
     // $catalog->setFont('anton', '', 10);
     // $catalog->AddPage();
@@ -163,6 +164,17 @@ if ($TYPE != '') {
             $catalog->writeHTML("<p>{$part}</p>");
             $catalog->Ln(1.5);
         }
+        $catalog->setColorArray('text', $BLACK);
+        $catalog->setFont('anton', '', 10);
+        $FORMATY = $MARGIN + $WIDTH + $SPACER;
+        $catalog->setY($FORMATY);
+        $catalog->writeHTML("<h3>Lotnummer</h3>");
+        $catalog->writeHTML("<h3>Formaat</h3>");
+        $catalog->writeHTML("<h3>Prijs</h3>");
+        $catalog->setFont('helvetica', '', 11);
+        $catalog->writeHTMLCell($WIDTH, 5, $leftEVEN + 22, $FORMATY + 0.5, "<p>1234</p>");
+        $catalog->writeHTMLCell($WIDTH, 5, $leftEVEN + 17, $FORMATY + 5.8, "<p>{$artwork['Formaat']}</p>");
+        $catalog->writeHTMLCell($WIDTH, 5, $leftEVEN + 11, $FORMATY + 5.8 + 5.8, "<p>bieden start vanaf &euro;{$artwork['Prijs']}</p>");
         $catalog->setColorArray('text', $BLACK);
 
         $catalog->AddPage();
