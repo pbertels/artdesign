@@ -35,9 +35,25 @@ foreach ($art as $code => $artwork) {
     $work = strtoupper($artwork['Werk']);
     $work = str_replace(['<BR>', 'é', 'â'], ['', 'E', 'A'], $work);
     $artist = $artwork['KunstDesigner'];
+    $lot = strtoupper($artwork['Lot']);
 
     // new slide
     $slide = $presentation->createSlide();
+
+    // number
+    $shape = $slide->createRichTextShape()
+        ->setHeight($MARGIN_TOP)
+        ->setWidth(0.25 * $W)
+        ->setOffsetX(10)
+        ->setOffsetY(10);
+    $shape->getActiveParagraph()->getAlignment()
+        ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+    $textRun = $shape->createTextRun("Lot {$lot}");
+    $textRun->getFont()
+        ->setName('Arial')
+        ->setBold(true)
+        ->setSize(24)
+        ->setColor(new Color($BLACK));
 
     // work
     $shape = $slide->createRichTextShape()

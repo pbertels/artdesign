@@ -51,7 +51,7 @@ if ($TYPE != '') {
     $catalog->setColorArray('text', $RED);
     $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN, '<h1 style="font-size: 500%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'L', false);
     $catalog->setColorArray('text', $GREEN);
-    $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 18, '<h1 style="font-size: 450%">FOR PALESTINE</h1>', 0, 1, false, true, 'L', false);
+    $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 18, '<h1 style="font-size: 460%">FOR PALESTINE</h1>', 0, 1, false, true, 'L', false);
     $catalog->setColorArray('text', $BLACK);
     $catalog->setFont('helvetica', '', 11);
     $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 40, "
@@ -82,6 +82,7 @@ if ($TYPE != '') {
         $catalog->setFont('anton', '', 10);
         $work = strtoupper($artwork['Werk']);
         $work = str_replace(['é', 'â'], ['E', 'A'], $work);
+        $price = euro($artwork['Prijs']);
         $artist = $artwork['KunstDesigner'];
         $catalog->setColorArray('text', $RED);
         $catalog->writeHTML("<h1 style=\"font-size: 250%\">{$work}</h1>");
@@ -120,11 +121,11 @@ if ($TYPE != '') {
         $catalog->setFont('anton', '', 10);
         $FORMATY = $MARGIN + $WIDTH + $SPACER;
         $catalog->setY($FORMATY);
-        $catalog->writeHTML("<h3>Lot 1234</h3>");
+        $catalog->writeHTML("<h3>Lot {$artwork['Lot']}</h3>");
         $catalog->setFont('helvetica', '', 11);
         $html = '<p>';
         if ($artwork['Formaat'] != '') $html .= "Formaat: {$artwork['Formaat']}<br>";
-        $html .= "Prijs: bieden start vanaf {$artwork['Prijs']} &euro;<br>";
+        $html .= "Prijs: bieden start vanaf {$price}<br>";
         $html .= '</p>';
         $catalog->writeHTML($html);
 
@@ -141,11 +142,6 @@ if ($TYPE != '') {
                     } else {
                         $catalog->Image($image, $x, $MARGIN, 0, $width);
                     }
-                    // if ($pic == 'TEMP') {
-                    //     $catalog->Rect($x, $MARGIN, $width, $width, 'F', [], $BLUE);
-                    //     $catalog->Image($image, $x + 10, $MARGIN + 10, $width - 20, 0);
-                    // } else {
-                    // }
                     $x += $width + $SPACER;
                 }
             } else {
@@ -162,18 +158,18 @@ if ($TYPE != '') {
     foreach ($art as $code => $artwork) {
         $artist = $artwork['KunstDesigner'];
         $work = $artwork['Werk'];
-        $price = preg_replace('/[^0-9]/', '', $artwork['Prijs']);
-        $number = substr('0000' . ($i++), -3, 3);
+        $price = euro($artwork['Prijs']);
+        $number = $artwork['Lot'];
         $row = '<tr>';
         $row .= "<td width=\"2cm\" style=\"text-align: left\">{$number}</td>";
         $row .= "<td width=\"6cm\" style=\"text-align: left\">{$artist}</td>";
         $row .= "<td width=\"7cm\" style=\"text-align: left\">{$work}</td>";
-        $row .= "<td width=\"2.5cm\" style=\"text-align: right\">&euro; {$price}</td>";
+        $row .= "<td width=\"2.5cm\" style=\"text-align: right\">{$price}</td>";
         $row .= '</tr>';
         $table[] = $row;
     }
     $header = '<tr style="font-weight: bold">';
-    $header .= "<td width=\"2cm\" style=\"text-align: left\">Nummer</td>";
+    $header .= "<td width=\"2cm\" style=\"text-align: left\">Lot</td>";
     $header .= "<td width=\"6cm\" style=\"text-align: left\">Kunstenaar / ontwerper</td>";
     $header .= "<td width=\"7cm\" style=\"text-align: left\">Titel of omschrijving van het item</td>";
     $header .= "<td width=\"2.5cm\" style=\"text-align: right\">Prijs</td>";
