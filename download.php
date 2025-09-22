@@ -110,7 +110,7 @@ if ($TYPE != '') {
     $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 40, "
 <p></p>
 <p>Meer dan {$AANTAL} kunstenaars en designers schonken hun werk voor deze veiling: schilderijen, beelden en designobjecten die samen een uniek en divers geheel vormen. Elk stuk is niet alleen een uitdrukking van creativiteit, maar ook van solidariteit.</p>
-<p>De opbrengst gaat integraal naar het Rode Kruis, Oxfam en UNWRA. Drie organisaties die dagelijks verschil maken, en die we met dit initiatief extra willen ondersteunen. Uw aanwezigheid en biedingen zorgen ervoor dat kunst hier méér wordt dan bewondering alleen: ze wordt een daad van verbondenheid.</p>
+<p>De opbrengst gaat integraal naar het Rode Kruis, Oxfam en UNWRA. Drie organisaties die dagelijks het verschil maken, en die we met dit initiatief extra willen ondersteunen. Uw aanwezigheid en biedingen zorgen ervoor dat kunst hier méér wordt dan bewondering alleen: ze wordt een daad van verbondenheid.</p>
 <p>Onze dank gaat ook uit naar onze sponsors: {$SPONSORLIST}. Dankzij hun steun kunnen we dit evenement niet alleen mogelijk maken, maar ook aangenaam, feestelijk en net iets minder dorstig.</p>
 <p>Blader gerust, kies met uw hart, en laat u meeslepen door de energie van de veiling. Want uiteindelijk wint niet enkel de hoogste bieder, maar vooral de mensen en doelen die we samen een stap vooruit helpen.</p>
 <p></p>
@@ -145,14 +145,16 @@ if ($TYPE != '') {
         if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
 
         $catalog->setFont('anton', '', 10);
-        $catalog->writeHTML("<p></p><h3>Over het werk</h3>");
-        $catalog->Ln(1.5);
-        $catalog->setFont('helvetica', '', 11);
-        foreach (explode('<br>', $artwork['OverWerk']) as $part) {
-            $catalog->writeHTML("<p>{$part}</p>");
+        if ($artwork['OverWerk'] != '') {
+            $catalog->writeHTML("<p></p><h3>Over het werk</h3>");
             $catalog->Ln(1.5);
+            $catalog->setFont('helvetica', '', 11);
+            foreach (explode('<br>', $artwork['OverWerk']) as $part) {
+                $catalog->writeHTML("<p>{$part}</p>");
+                $catalog->Ln(1.5);
+            }
+            $catalog->Ln(3.5);
         }
-        $catalog->Ln(3.5);
 
         $catalog->setFont('anton', '', 10);
         $catalog->writeHTML("<h3>Biografie {$artist}</h3>");
