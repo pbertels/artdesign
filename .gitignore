@@ -4,6 +4,7 @@
 update.sh
 sponsors/original
 images/original
+output
 
 # PHP composer
 composer.lock

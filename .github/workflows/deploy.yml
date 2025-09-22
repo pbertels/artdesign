@@ -24,8 +24,11 @@ jobs:
             mv $d/art-* .
             cp .env $d/
             rm -rf $d/vendor/
+            rm -rf $d/output/
             git clone --depth 1 --branch main https://${{ secrets.PAT }}@github.com/pbertels/artdesign.git tmp
             mv tmp/* .
+            mkdir output/
+            chmod 711 output/
             rm -rf tmp/
             composer install
             composer update
