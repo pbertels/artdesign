@@ -5,11 +5,12 @@ $SPONSORS = [
     'norsu' => ['name' => 'Norsu', 'desc' => ''],
     'masjien' => ['name' => 'Masjien', 'desc' => ''],
     '3wilgen' => ['name' => 'De Drie Wilgen', 'desc' => ''],
-    'rest' => ['name' => 'REST Mortsel', 'desc' => ''],
-    'edith' => ['name' => 'Edith Lafond', 'desc' => ''],
+    'rentabar' => ['name' => 'Rentabar', 'desc' => 'Dennis'],
+    'rest' => ['name' => 'REST Mortsel', 'desc' => 'workshop kinderen'],
+    'edith' => ['name' => 'Edith Lafond', 'desc' => 'zus van'],
     'bonheur' => ['name' => 'Bonheur', 'desc' => ''],
-    // 'mortselarij' => ['name' => 'De Mortselarij', 'desc' => ''],
-    'rentabar' => ['name' => 'Rentabar', 'desc' => ''],
+    'yugen' => ['name' => 'Yugen', 'desc' => 'kombucha'],
+    'kunstwerkt' => ['name' => 'Kunst Werkt', 'desc' => 'ezels'],
     // '' => ['name' => '', 'desc' => ''],
 ];
 ksort($SPONSORS);

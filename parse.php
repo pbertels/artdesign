@@ -8,10 +8,12 @@ $STEPS = [
     1000 => 250,
     500 => 100,
     200 => 50,
-    60 => 20,
-    0 => 10,
+    100 => 20,
+    50 => 10,
+    0 => 50,
 ];
-function euro($price) {
+function euro($price)
+{
     $price = "{$price}";
     if (strlen($price) > 3) {
         $last = substr($price, -3, 3);
