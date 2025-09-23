@@ -8,7 +8,7 @@ $SPONSORS = [
     'rest' => ['name' => 'REST Mortsel', 'desc' => ''],
     'edith' => ['name' => 'Edith Lafond', 'desc' => ''],
     'bonheur' => ['name' => 'Bonheur', 'desc' => ''],
-    'mortselarij' => ['name' => 'De Mortselarij', 'desc' => ''],
+    // 'mortselarij' => ['name' => 'De Mortselarij', 'desc' => ''],
     'rentabar' => ['name' => 'Rentabar', 'desc' => ''],
     // '' => ['name' => '', 'desc' => ''],
 ];
