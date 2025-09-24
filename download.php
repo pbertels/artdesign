@@ -225,7 +225,7 @@ if ($TYPE == 'binnenwerk') {
     $y = $WIDTH - (($i - $i % $ROW) / $ROW) * ($sponsorHEIGHT + $SPACER);
     $kaft->setFont('helvetica', '', 8);
     foreach ($SPONSORS as $code => $sponsor) {
-        if (isset($sponsor['logo']) && $sponsor['logo'] ==  false)
+        if (isset($sponsor['logo']) && $sponsor['logo'] ==  false) continue;
         $logo = "./sponsors/{$code}.png";
         if (file_exists($logo)) {
             $kaft->Image($logo, $x, $y, $sponsorWIDTH, 0);
