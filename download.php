@@ -83,11 +83,12 @@ if ($TYPE != '') {
         $work = strtoupper($artwork['Werk']);
         $work = str_replace(['é', 'â'], ['E', 'A'], $work);
         $price = euro($artwork['Prijs']);
-        $artist = $artwork['KunstDesigner'];
+        $artistH1 = hearts($artwork['KunstDesigner'], 20, 'anton', 'green');
+        $artistH3 = hearts($artwork['KunstDesigner'], 15, 'anton');
         $catalog->setColorArray('text', $RED);
         $catalog->writeHTML("<h1 style=\"font-size: 250%\">{$work}</h1>");
         $catalog->setColorArray('text', $GREEN);
-        $catalog->writeHTML("<h1>{$artist}</h1>");
+        $catalog->writeHTML("<h1 style=\"line-height: 1.6;\">{$artistH1}</h1>");
         $catalog->setColorArray('text', $BLACK);
         $catalog->setFont('helvetica', '', 11);
         if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
@@ -98,6 +99,7 @@ if ($TYPE != '') {
             $catalog->Ln(1.5);
             $catalog->setFont('helvetica', '', 11);
             foreach (explode('<br>', $artwork['OverWerk']) as $part) {
+                $part = hearts($part, 8);
                 $catalog->writeHTML("<p>{$part}</p>");
                 $catalog->Ln(1.5);
             }
@@ -107,12 +109,13 @@ if ($TYPE != '') {
         }
 
         $catalog->setFont('anton', '', 10);
-        $catalog->writeHTML("<h3>Biografie {$artist}</h3>");
+        $catalog->writeHTML("<h3>Biografie {$artistH3}</h3>");
         $catalog->Ln(1.5);
         $bio = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
         $catalog->setFont('helvetica', '', 11);
         $catalog->setColorArray('text', substr($bio, 0, 1) == '_' ? $RED : $BLACK);
         foreach (explode('<br>', $bio) as $part) {
+            $part = hearts($part, 8);
             $catalog->writeHTML("<p>{$part}</p>");
             $catalog->Ln(1.5);
         }
@@ -156,7 +159,7 @@ if ($TYPE != '') {
     $table = [];
     $i = 1;
     foreach ($art as $code => $artwork) {
-        $artist = $artwork['KunstDesigner'];
+        $artist = hearts($artwork['KunstDesigner'], 8);
         $work = $artwork['Werk'];
         $price = euro($artwork['Prijs']);
         $number = $artwork['Lot'];

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="200mm"
+   height="300mm"
+   viewBox="0 0 200 300"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   sodipodi:docname="hearts-anton.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   inkscape:export-filename="hearts.png"
+   inkscape:export-xdpi="317.5"
+   inkscape:export-ydpi="317.5"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.48404625"
+     inkscape:cx="272.70121"
+     inkscape:cy="562.96273"
+     inkscape:window-width="1512"
+     inkscape:window-height="842"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" /><defs
+     id="defs1"><clipPath
+       id="clipPath13329"
+       clipPathUnits="userSpaceOnUse"><path
+         id="path13331"
+         d="M 0,0 H 720 V 405.354 H 0 Z" /></clipPath><clipPath
+       id="clipPath13357"
+       clipPathUnits="userSpaceOnUse"><path
+         id="path13359"
+         d="M 0,0 H 720 V 405.354 H 0 Z" /></clipPath></defs><path
+     style="fill:#1a1a1a;stroke-width:11.6531"
+     d="M 98.83576,297.82222 C 90.290027,273.21669 79.638828,255.42244 46.947402,211.13587 22.027127,177.37674 16.778461,168.24837 13.501134,152.96667 c -4.4393321,-20.69986 6.766451,-43.69104 24.079688,-49.40493 9.698741,-3.20087 25.521613,-2.85601 34.137743,0.74405 9.085576,3.7962 21.373539,16.45264 24.57835,25.31539 2.916127,8.06441 4.934675,8.72687 6.963285,2.28526 6.96952,-22.13082 31.4048,-35.419318 54.23865,-29.49629 23.89827,6.19913 34.87062,27.81977 27.90896,54.99374 -4.25608,16.61307 -9.43819,25.37885 -35.14395,59.44747 -27.22662,36.08429 -35.09423,48.54775 -43.29957,68.59298 -5.20733,12.72128 -7.040023,15.51203 -8.12853,12.37789 z"
+     id="path1" /></svg>

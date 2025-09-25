@@ -69,6 +69,13 @@ foreach (glob('./images/*.jpg') as $filename) {
     $images[$code][$pic] = $filename;
 }
 
+function hearts($value, $size = 12, $font = '', $colour = '')
+{
+    $f = $font == '' ? $font : '-' . $font;
+    $c = $colour == '' ? $colour : '-' . $colour;
+    return str_replace('&hearts;', "<img src=\"/images/hearts{$f}{$c}.svg\" height=\"{$size}\"/>", $value);
+}
+
 // PARSE DATA
 $art = [];
 $header = [];
@@ -80,7 +87,8 @@ while (!feof($fp)) {
         $header = $data;
     } else {
         foreach ($data as $index => $value) {
-            $record[$header[$index]] = preg_replace('/[\s]*\$\$\$[\$]*[\s]*/', "<br>", trim($value));
+            $value = preg_replace('/[\s]*\$\$\$[\$]*[\s]*/', "<br>", trim($value));
+            $record[$header[$index]] = $value;
         }
         $code = $record['Code'];
         if ($code == '' || substr(strtoupper($code), 0, 5) == 'OPGEV') $code = strtolower($code) . count($art);
