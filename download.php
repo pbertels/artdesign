@@ -229,9 +229,12 @@ if ($TYPE == 'binnenwerk') {
     $kaft->setFont('helvetica', '', 8);
     foreach ($SPONSORS as $code => $sponsor) {
         if (isset($sponsor['logo']) && $sponsor['logo'] ==  false) continue;
-        $logo = "./sponsors/{$code}.png";
-        if (file_exists($logo)) {
-            $kaft->Image($logo, $x, $y, $sponsorWIDTH, 0);
+        $logoPNG = "./sponsors/{$code}.png";
+        $logoSVG = "./sponsors/{$code}.svg";
+        if (file_exists($logoPNG)) {
+            $kaft->Image($logoPNG, $x, $y, $sponsorWIDTH, 0);
+        } else if (file_exists($logoSVG)) {
+            $kaft->ImageSVG($logoSVG, $x, $y, $sponsorWIDTH, 0);
         } else {
             $kaft->writeHTMLCell($sponsorWIDTH, $sponsorHEIGHT, $x, $y, "<p>{$sponsor['name']}</p>", 1, 1, false, true, 'C', false);
         }
