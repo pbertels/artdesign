@@ -34,7 +34,8 @@ foreach ($art as $code => $artwork) {
 
     $work = strtoupper($artwork['Werk']);
     $work = str_replace(['<BR>', 'é', 'â'], ['', 'E', 'A'], $work);
-    $artist = $artwork['KunstDesigner'];
+    $work = html_entity_decode($work, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $artist = html_entity_decode($artwork['KunstDesigner'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $lot = strtoupper($artwork['Lot']);
 
     // new slide
