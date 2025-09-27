@@ -1,4 +1,4 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
-    RewriteRule ^/proper.csv$ proper.php [L]
+    RewriteRule ^proper.tsv$ proper.php [L]
 </IfModule>
