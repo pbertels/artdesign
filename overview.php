@@ -42,8 +42,7 @@ $r = 2 * $R;
 foreach ($art as $code => $artwork) {
 
     // DATA
-    $work = strtoupper($artwork['Werk']);
-    $work = str_replace(['é', 'â'], ['E', 'A'], $work);
+    $work = strtoupper($artwork['WerkHoofdletters']);
     $artist = $artwork['KunstDesigner'];
     $lot = $artwork['Lot'];
 

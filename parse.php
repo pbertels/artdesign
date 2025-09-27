@@ -99,12 +99,30 @@ while (!feof($fp)) {
             $record['im'] = [];
             $record['foto'] = 0;
         }
-        if ($record['Lot'] == '') $record['Lot'] = '999 TBD';
-        $record['Prijs'] = start($record['Prijs']);
+
         if ($code != '_VERKOOP') $art[$code] = $record;
     }
 }
 fclose($fp);
+
+// PROPER
+$lotnrs = array_column($art, 'Lot');
+foreach ($art as $code => $artwork) {
+    $artwork['Prijs'] = start($artwork['Prijs']);
+    $artwork['PrijsEuro'] = euro($artwork['Prijs']);
+    $artwork['Instagram'] = str_replace('@', '', $artwork['Instagram']);
+    $artwork['Biografie'] = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
+    $artwork['WerkHoofdletters'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['Werk']));
+    $artwork['KunstDesignerAntonGreen'] = hearts($artwork['KunstDesigner'], 20, 'anton', 'green');
+    $artwork['KunstDesignerAntonBlack'] = hearts($artwork['KunstDesigner'], 15, 'anton');
+
+    if ($artwork['Lot'] == '') {
+        $next = max($lotnrs) + 1;
+        $artwork['Lot'] = $next;
+        $lotnrs[] = $next;
+    }
+    $art[$code] = $artwork;
+}
 
 // SORTEREN
 array_multisort(array_column($art, 'Lot'), SORT_ASC, array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, array_column($art, 'KunstDesigner'), SORT_ASC, $art);

@@ -51,9 +51,6 @@ function prepareRow($FIELDS, $values = [])
 foreach ($art as $code => $artwork) {
 
     // DATA
-    $work = strtoupper($artwork['Werk']);
-    $work = str_replace(['é', 'â'], ['E', 'A'], $work);
-    $artist = $artwork['KunstDesigner'];
     $lot = $artwork['Lot'];
 
     // HEADER
@@ -65,9 +62,10 @@ foreach ($art as $code => $artwork) {
     $silent->setFont('anton', '', 24);
     $silent->setColorArray('text', $RED);
     $silent->setX(0);
-    $silent->writeHTML("<h3>{$work}</h3>");
+    $silent->writeHTML("<h3>{$artwork['WerkHoofdletters']}</h3>");
     $silent->setColorArray('text', $GREEN);
-    $silent->writeHTML("<h3>{$artist}</h3>");
+    $silent->setFont('anton', '', 10);
+    $silent->writeHTML("<h1>{$artwork['KunstDesignerAntonGreen']}</h1>");
     $silent->setColorArray('text', $BLACK);
     $silent->Ln(3);
 
@@ -91,7 +89,7 @@ foreach ($art as $code => $artwork) {
     $silent->Ln(-2);
     $html = '<table border="1px solid gray">';
     $i = 0;
-    $bod = start($artwork['Prijs']);
+    $bod = $artwork['Prijs'];
     for ($i = 0; $i < 15; $i++) {
         $html .= prepareRow($FIELDS, ['Bod' => "<br>" . euro($bod) . "&nbsp;"]);
         $bod = increment($bod);

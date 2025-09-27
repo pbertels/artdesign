@@ -80,15 +80,12 @@ if ($TYPE != '') {
         }
         $catalog->AddPage();
         $catalog->setFont('anton', '', 10);
-        $work = strtoupper($artwork['Werk']);
-        $work = str_replace(['é', 'â'], ['E', 'A'], $work);
-        $price = euro($artwork['Prijs']);
-        $artistH1 = hearts($artwork['KunstDesigner'], 20, 'anton', 'green');
-        $artistH3 = hearts($artwork['KunstDesigner'], 15, 'anton');
+        $work = strtoupper($artwork['WerkHoofdletters']);
+        $price = $artwork['PrijsEuro'];
         $catalog->setColorArray('text', $RED);
         $catalog->writeHTML("<h1 style=\"font-size: 250%\">{$work}</h1>");
         $catalog->setColorArray('text', $GREEN);
-        $catalog->writeHTML("<h1 style=\"line-height: 1.6;\">{$artistH1}</h1>");
+        $catalog->writeHTML("<h1 style=\"line-height: 1.6;\">{$artwork['KunstDesignerAntonGreen']}</h1>");
         $catalog->setColorArray('text', $BLACK);
         $catalog->setFont('helvetica', '', 11);
         if ($artwork['Schenker'] != 'idem') $catalog->writeHTML("<p>geschonken door {$artwork['Schenker']}</p>");
@@ -109,9 +106,9 @@ if ($TYPE != '') {
         }
 
         $catalog->setFont('anton', '', 10);
-        $catalog->writeHTML("<h3>Biografie {$artistH3}</h3>");
+        $catalog->writeHTML("<h3>Biografie {$artwork['KunstDesignerAntonBlack']}</h3>");
         $catalog->Ln(1.5);
-        $bio = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
+        $bio = $artwork['Biografie'];
         $catalog->setFont('helvetica', '', 11);
         $catalog->setColorArray('text', substr($bio, 0, 1) == '_' ? $RED : $BLACK);
         foreach (explode('<br>', $bio) as $part) {
@@ -119,10 +116,9 @@ if ($TYPE != '') {
             $catalog->writeHTML("<p>{$part}</p>");
             $catalog->Ln(1.5);
         }
-        $insta = str_replace('@', '', $artwork['Instagram']);
-        if ($insta != '') {
+        if ($artwork['Instagram'] != '') {
             $catalog->ImageSVG('/images/instagram.svg', null, $catalog->GetY() + 2, 6);
-            $catalog->writeHTMLCell(100, 0, $catalog->GetX() + 7, $catalog->GetY() + 2.5, "<p>{$insta}</p>");
+            $catalog->writeHTMLCell(100, 0, $catalog->GetX() + 7, $catalog->GetY() + 2.5, "<p>{$artwork['Instagram']}</p>");
         }
         // practical
         $catalog->setColorArray('text', $BLACK);
@@ -166,7 +162,7 @@ if ($TYPE != '') {
     foreach ($art as $code => $artwork) {
         $artist = hearts($artwork['KunstDesigner'], 8);
         $work = $artwork['Werk'];
-        $price = euro($artwork['Prijs']);
+        $price = $artwork['PrijsEuro'];
         $number = $artwork['Lot'];
         $row = '<tr>';
         $row .= "<td width=\"2cm\" style=\"text-align: left\">{$number}</td>";
@@ -222,7 +218,7 @@ if ($TYPE == 'binnenwerk') {
     // $kaft->Rect($SIZE, 0, $THICKNESS, $SIZE, 'F', [], $BLACK);
 
     // back
-    $ROW = 6;
+    $ROW = 5;
     $i = count($SPONSORS);
     foreach ($SPONSORS as $s) if (isset($s['logo']) && $s['logo'] ==  false) $i--;
     $sponsorWIDTH = $WIDTH / $ROW - $SPACER;
