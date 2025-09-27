@@ -27,6 +27,7 @@ jobs:
             rm -rf $d/output/
             git clone --depth 1 --branch main https://${{ secrets.PAT }}@github.com/pbertels/artdesign.git tmp
             mv tmp/* .
+            mv tmp/.htaccess .
             mkdir output/
             chmod 711 output/
             rm -rf tmp/

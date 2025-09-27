@@ -5,7 +5,7 @@ require __DIR__ . '/parse.php';
 $cols = ['Lot', 'KunstDesigner', 'WerkHoofdletters', 'Prijs'];
 
 header('Content-Type: text/csv');
-header('Content-Disposition: attachment;filename=proper.tsv');
+// header('Content-Disposition: attachment;filename=proper.csv');
 
 foreach ($cols as $col) {
     echo "$col; ";
