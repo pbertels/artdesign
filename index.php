@@ -8,4 +8,4 @@ echo '<p>Drukwerk catalogus: <a href="./download.php?type=binnenwerk">binnenwerk
 echo '<p>Powerpoint met presentatie van alle werken: <a href="./powerpoint.php">aanmaken</a></p>';
 echo '<p>Silent Auction: <a href="./silent.php">download A4</a></p>';
 echo '<p>Overzicht: <a href="./overview.php">overzicht op A4</a></p>';
-echo '<p>Single Source Of Truth: <a href="./proper.csv">CSV data file</a></p>';
+echo '<p>Single Source Of Truth: <a href="./proper.tsv">TSV data file</a></p>';
