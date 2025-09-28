@@ -66,6 +66,9 @@ if ($TYPE != '') {
 <p>Met warmte en dankbaarheid,</p>
 <p>Fred, Evelyn, Peter, Pieter & Jasmien</p>
 ");
+    $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
+    $catalog->AddSectionPage("Foto's en uitleg bij alle werken", $GREEN, $WHITE, $WIDTH, $leftODD);
+
 
     // ART
     $prev = 'brol';
@@ -74,8 +77,8 @@ if ($TYPE != '') {
         $t = $artwork['TYPE'] != '' ? str_replace(['KLIEF', '...'], ['K- LIEF', ''], strtoupper($artwork['TYPE'])) : 'TE BEKIJKEN...';
         if ($t != $prev) {
             $section++;
-            $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
-            $catalog->AddSectionPage($t, $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+            // $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+            // $catalog->AddSectionPage($t, $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
             $prev = $t;
         }
         $catalog->AddPage();

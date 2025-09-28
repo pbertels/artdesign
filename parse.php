@@ -1,5 +1,7 @@
 <?php
 
+$BLOCKS = 9;
+
 // BID INCREMENTS
 $STEPS = [
     100000000 => 1000,
@@ -100,13 +102,20 @@ while (!feof($fp)) {
             $record['foto'] = 0;
         }
 
+        // afwisseling creëren
+        $record['sortkey'] = random_int(0, $BLOCKS) . strtoupper(substr($record['TYPE'], 0, 1) . substr($record['TYPE'], -4, 1));
+        // $record['Lot'] = 0;
         if ($code != '_VERKOOP') $art[$code] = $record;
     }
 }
 fclose($fp);
 
+// SORTEREN
+array_multisort(array_column($art, 'sortkey'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, $art);
+
 // PROPER
 $lotnrs = array_column($art, 'Lot');
+$lotnrs[] = 100;
 foreach ($art as $code => $artwork) {
     $artwork['Prijs'] = start($artwork['Prijs']);
     $artwork['PrijsEuro'] = euro($artwork['Prijs']);
@@ -116,7 +125,7 @@ foreach ($art as $code => $artwork) {
     $artwork['KunstDesignerAntonGreen'] = hearts($artwork['KunstDesigner'], 20, 'anton', 'green');
     $artwork['KunstDesignerAntonBlack'] = hearts($artwork['KunstDesigner'], 15, 'anton');
 
-    if ($artwork['Lot'] == '') {
+    if ($artwork['Lot'] == '' || $artwork['Lot'] == 0) {
         $next = max($lotnrs) + 1;
         $artwork['Lot'] = $next;
         $lotnrs[] = $next;
@@ -125,4 +134,4 @@ foreach ($art as $code => $artwork) {
 }
 
 // SORTEREN
-array_multisort(array_column($art, 'Lot'), SORT_ASC, array_column($art, 'TYPE'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, array_column($art, 'KunstDesigner'), SORT_ASC, $art);
+array_multisort(array_column($art, 'Lot'), SORT_ASC, $art);
