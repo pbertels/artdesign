@@ -14,15 +14,15 @@ $STEPS = [
     50 => 10,
     0 => 50,
 ];
-function euro($price)
+function euro($org)
 {
-    $price = "{$price}";
+    $price = "{$org}";
     if (strlen($price) > 3) {
         $last = substr($price, -3, 3);
         $first = substr($price, 0, -3);
         $price = "{$first}.{$last}";
     }
-    return "{$price} &euro;";
+    return is_numeric($org) ? "{$price} &euro;" : "{$org}";
 }
 function increment($bod)
 {
@@ -117,7 +117,7 @@ array_multisort(array_column($art, 'sortkey'), SORT_ASC, array_column($art, 'Pri
 $lotnrs = array_column($art, 'Lot');
 $lotnrs[] = 100;
 foreach ($art as $code => $artwork) {
-    $artwork['Prijs'] = start($artwork['Prijs']);
+    $artwork['Prijs'] = $artwork['Prijs'] == 0 ? 'TO BE DECIDED' : start($artwork['Prijs']);
     $artwork['PrijsEuro'] = euro($artwork['Prijs']);
     $artwork['Instagram'] = str_replace('@', '', $artwork['Instagram']);
     $artwork['Biografie'] = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
