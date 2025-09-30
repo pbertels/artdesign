@@ -122,6 +122,7 @@ foreach ($art as $code => $artwork) {
     $artwork['Instagram'] = str_replace('@', '', $artwork['Instagram']);
     $artwork['Biografie'] = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
     $artwork['WerkHoofdletters'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['Werk']));
+    $artwork['ßß'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['WerkKorter']));
     $artwork['KunstDesignerAntonGreen'] = hearts($artwork['KunstDesigner'], 20, 'anton', 'green');
     $artwork['KunstDesignerAntonBlack'] = hearts($artwork['KunstDesigner'], 15, 'anton');
 
