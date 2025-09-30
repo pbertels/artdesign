@@ -90,9 +90,13 @@ foreach ($art as $code => $artwork) {
     $html = '<table border="1px solid gray">';
     $i = 0;
     $bod = $artwork['Prijs'];
-    for ($i = 0; $i < 15; $i++) {
-        $html .= prepareRow($FIELDS, ['Bod' => "<br>" . euro($bod) . "&nbsp;"]);
-        $bod = increment($bod);
+    if (is_numeric($bod)) {
+        for ($i = 0; $i < 15; $i++) {
+            $html .= prepareRow($FIELDS, ['Bod' => "<br>" . euro($bod) . "&nbsp;"]);
+            $bod = increment($bod);
+        }
+    } else {
+        $html .= "<tr><td>{$bod}</td></tr>";
     }
     $html .= '</table>';
     $silent->setFont('helvetica', '', 11);
