@@ -61,7 +61,7 @@ function text($slide, $x, $y, $w, $h, $text, $font = 'Arial', $bold = false, $si
 $W = 808;
 $mm = $W / 214;
 $H = round(152 * $mm);
-$COL75 = 100 * $mm;
+$COL75 = 90 * $mm;
 $MARGIN_TOP = round(10 * $mm);
 $MARGIN_BOTTOM = $MARGIN_TOP;
 $GUTTER = round(10 * $mm);
@@ -87,7 +87,7 @@ foreach ($art as $code => $artwork) {
     $work = str_replace('<BR>', '', $work);
     $work = html_entity_decode($work, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $artist = html_entity_decode($artwork['KunstDesigner'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    $artist = str_replace(' en ', "\nen", $artist);
+    $artist = str_replace(' en ', "\nen ", $artist);
     $bio = html_entity_decode($artwork['Biografie'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $over = html_entity_decode($artwork['OverWerk'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $lot = strtoupper($artwork['Lot']);
