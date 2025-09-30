@@ -71,16 +71,16 @@ if ($TYPE != '') {
 
 
     // ART
-    $prev = 'brol';
+    // $prev = 'brol';
     $section = 0;
     foreach ($art as $code => $artwork) {
-        $t = $artwork['TYPE'] != '' ? str_replace(['KLIEF', '...'], ['K- LIEF', ''], strtoupper($artwork['TYPE'])) : 'TE BEKIJKEN...';
-        if ($t != $prev) {
-            $section++;
-            // $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
-            // $catalog->AddSectionPage($t, $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
-            $prev = $t;
-        }
+        // $t = $artwork['TYPE'] != '' ? str_replace(['KLIEF', '...'], ['K- LIEF', ''], strtoupper($artwork['TYPE'])) : 'TE BEKIJKEN...';
+        // if ($t != $prev) {
+        //     $section++;
+        //     $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+        //     $catalog->AddSectionPage($t, $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+        //     $prev = $t;
+        // }
         $catalog->AddPage();
         $catalog->setFont('anton', '', 10);
         $work = strtoupper($artwork['WerkHoofdletters']);
@@ -152,7 +152,10 @@ if ($TYPE != '') {
                     $x += $width + $SPACER;
                 }
             } else {
-                $catalog->Rect($leftODD, $MARGIN, $WIDTH, $WIDTH, 'F', [], substr($code, 0, 5) == 'opgev' ? $GREEN : $RED);
+                $catalog->setLineStyle(['width' => 2, 'cap' => 'butt', 'join' => 'miter', 'dash' => 4, 'color' => $BLACK]);
+                $catalog->Rect($leftODD, $MARGIN, $WIDTH, $WIDTH, 'L', [], $WHITE);
+                $catalog->Line($leftODD, $MARGIN, $leftODD + $WIDTH, $MARGIN + $WIDTH);
+                $catalog->Line($leftODD + $WIDTH, $MARGIN, $leftODD, $MARGIN + $WIDTH);
             }
         }
     }
