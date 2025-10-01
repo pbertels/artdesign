@@ -2,6 +2,7 @@
 
 $SPONSORS = [
     'norsu' => ['name' => 'Norsu', 'desc' => 'drukwerk'],
+    'verschueren' => ['name' => 'Drankencentrale Verschueren', 'desc' => 'drank'],
     'masjien' => ['name' => 'Masjien', 'desc' => 'drukwerk'],
     '3wilgen' => ['name' => 'De Drie Wilgen', 'desc' => 'drank'],
     'rentabar' => ['name' => 'Rent@Bar', 'desc' => 'Dennis van de foodtrucks'],
