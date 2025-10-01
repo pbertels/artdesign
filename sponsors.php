@@ -1,7 +1,6 @@
 <?php
 
 $SPONSORS = [
-    'vinovatie' => ['name' => 'Vinovatie', 'desc' => 'wijenn'],
     'norsu' => ['name' => 'Norsu', 'desc' => 'drukwerk'],
     'masjien' => ['name' => 'Masjien', 'desc' => 'drukwerk'],
     '3wilgen' => ['name' => 'De Drie Wilgen', 'desc' => 'drank'],
