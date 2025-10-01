@@ -139,7 +139,6 @@ foreach ($art as $code => $artwork) {
     if (is_array($artwork['im'])) {
         $count = count($artwork['im']);
         if ($count > 0) {
-            $x = $x1;
             $height = (($y2 - $y1) - ($count - 1) * $SPACER) / $count;
             foreach ($artwork['im'] as $pic => $image) {
                 list($orig_W, $orig_H) = getimagesize($image);

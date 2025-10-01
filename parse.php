@@ -125,7 +125,10 @@ foreach ($art as $code => $artwork) {
     $artwork['WerkHoofdlettersKorter'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['WerkKorter']));
     $artwork['ßß'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['WerkKorter']));
     $artwork['KunstDesignerAntonGreen'] = hearts($artwork['KunstDesigner'], 20, 'anton', 'green');
+    $artwork['KunstDesignerAntonGreenSmaller'] = hearts(str_replace(' en ', ' <br>en ', $artwork['KunstDesigner']), 14, 'anton', 'green');
     $artwork['KunstDesignerAntonBlack'] = hearts($artwork['KunstDesigner'], 15, 'anton');
+    $artwork['KunstDesignerAntonBlackSmaller'] = hearts($artwork['KunstDesigner'], 11, 'anton');
+    $artwork['KunstDesignerHelveticaBlack'] = hearts($artwork['KunstDesigner'], 7, '');
 
     if ($artwork['Lot'] == '' || $artwork['Lot'] == 0) {
         $next = max($lotnrs) + 1;
