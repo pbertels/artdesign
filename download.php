@@ -10,6 +10,7 @@ require __DIR__ . '/parse.php';
 
 // TYPE
 $TYPE = isset($_GET['type']) && in_array($_GET['type'], ['binnenwerk', 'kaft']) ? $_GET['type'] : 'binnenwerk';
+$COMPRESS = isset($_GET['compress']);
 
 // DEFINITIONS
 $RED = [235, 90, 60];
@@ -146,6 +147,7 @@ if ($TYPE != '') {
             if ($count > 0) {
                 $height = (($y2 - $y1) - ($count - 1) * $SPACER) / $count;
                 foreach ($artwork['im'] as $pic => $image) {
+                    if ($COMPRESS) $image = str_replace('images/', 'images/thumbnails/', $image);
                     list($orig_W, $orig_H) = getimagesize($image);
                     $imH = round($height);
                     $imW = round($orig_W * $imH / $orig_H);
