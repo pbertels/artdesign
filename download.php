@@ -66,27 +66,33 @@ if ($TYPE != '') {
         <p>Met warmte en dankbaarheid,</p>
         <p>Fred, Evelyn, Peter, Pieter & Jasmien</p>
         ");
-    $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
-    $catalog->AddSectionPage("Foto's en uitleg bij alle werken", $GREEN, $WHITE, $WIDTH, $leftODD, 400);
+    // $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
+    // $catalog->AddSectionPage("Foto's en uitleg bij alle werken", $GREEN, $WHITE, $WIDTH, $leftODD, 400);
 
 
     // ART
     $s = 0;
+    $section = 0;
+    $prev = 'brol';
     foreach ($art as $code => $artwork) {
 
         // DATA
         $work = $artwork['WerkHoofdlettersKorter'];
-        // $artist = $artwork['KunstDesigner'];
-        // $artist = str_replace(' en ', "<br>en ", $artist);
         $bio = $artwork['Biografie'];
         $over = $artwork['OverWerk'];
         $lot = strtoupper($artwork['Lot']);
 
+        // CATEGORIE
+        $t = substr($lot, 0, 1);
+        if ($t != $prev) {
+            $section++;
+            $cat = ['1' => 'Veiling op papier', '2' => 'Live bieden'];
+            $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+            $catalog->AddSectionPage($cat[$t], $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD, 400);
+            $prev = $t;
+        }
+
         // FORMAT
-        // // format text
-        // $OverEnBio = "";
-        // if ($over != "") $OverEnBio .= "<b>Over het werk</b>\n{$over}\n\n";
-        // if ($bio != "") $OverEnBio .= "<b>Biografie</b>\n{$bio}";
         $info = "<p><b>Lot {$lot}</b><br>";
         if ($artwork['Formaat'] != "") $info .= "{$artwork['Formaat']}<br>";
         $info .= "Bieden start bij " . (is_numeric($artwork['Prijs']) ? euro($artwork['Prijs']) : $artwork['Prijs']);
