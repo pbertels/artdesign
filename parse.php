@@ -109,18 +109,17 @@ while (!feof($fp)) {
 
         // afwisseling creëren
         $record['sortkey'] = random_int(0, $BLOCKS) . strtoupper(substr($record['TYPE'], 0, 1) . substr($record['TYPE'], -4, 1));
-        // $record['Lot'] = 0;
         if ($code != '_VERKOOP') $art[$code] = $record;
     }
 }
 fclose($fp);
 
 // SORTEREN
-array_multisort(array_column($art, 'sortkey'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, $art);
+array_multisort(array_column($art, 'Lot'), SORT_ASC, array_column($art, 'sortkey'), SORT_ASC, array_column($art, 'Prijs'), SORT_ASC, $art);
 
 // PROPER
-$lotnrs = array_column($art, 'Lot');
-$lotnrs[] = 100;
+// $lotnrs = array_column($art, 'Lot');
+$lotnrs = [100];
 foreach ($art as $code => $artwork) {
     $artwork['Prijs'] = $artwork['Prijs'] == 0 ? 'TO BE DECIDED' : start($artwork['Prijs']);
     $artwork['PrijsEuro'] = euro($artwork['Prijs']);
@@ -136,12 +135,26 @@ foreach ($art as $code => $artwork) {
     $artwork['KunstDesignerHelveticaBlack'] = hearts($artwork['KunstDesigner'], 7, '');
 
     if ($artwork['Lot'] == '' || $artwork['Lot'] == 0) {
+        // echo "<pre>{$artwork['Lot']} LEEG {$code}</pre>";
         $next = max($lotnrs) + 1;
         $artwork['Lot'] = $next;
-        $lotnrs[] = $next;
     }
+    if (in_array($artwork['Lot'], $lotnrs)) {
+        $t = ((1 * substr($artwork['Lot'], 0, 1)) + 1) * 100;
+        for ($i = 0; $i < count($lotnrs); $i++) {
+            if ($lotnrs[$i] < $t) $next = $lotnrs[$i];
+        }
+        $next++;
+        // echo "<pre>{$artwork['Lot']} hadden we al: {$next} {$code}</pre>";
+        $artwork['Lot'] = $next;
+    } else {
+        // echo "<pre>{$artwork['Lot']} is UNIEK</pre>";
+    }
+    $lotnrs[] = $artwork['Lot'];
     $art[$code] = $artwork;
 }
+// echo '<pre>' . print_r($art, true) . '</pre>';
+// exit;
 
 // SORTEREN
 array_multisort(array_column($art, 'Lot'), SORT_ASC, $art);

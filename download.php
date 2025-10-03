@@ -87,8 +87,9 @@ if ($TYPE != '') {
         if ($t != $prev) {
             $section++;
             $cat = ['1' => 'Veiling op papier', '2' => 'Live bieden'];
+            $categorie = isset($cat[$t]) ? $cat[$t] : 'ONBEKEND';
             $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
-            $catalog->AddSectionPage($cat[$t], $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD, 400);
+            $catalog->AddSectionPage($categorie, $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD, 400);
             $prev = $t;
         }
 
