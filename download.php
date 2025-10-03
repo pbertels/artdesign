@@ -119,19 +119,25 @@ if ($TYPE != '') {
         }
         $catalog->setFont('helvetica', '', 8.5);
         $catalog->setColorArray('text', $BLACK);
-        $html = "<p><span style=\"font-family: anton; font-size: 125%;\">Over het werk</span><br>{$over}</p>";
-        $html .= "<p><span style=\"font-family: anton; font-size: 125%;\">Biografie {$artwork['KunstDesignerAntonBlackSmaller']}</span><br>{$bio}</p>";
+        $html = $over == '' ? '' : "<p><span style=\"font-family: anton; font-size: 125%;\">Over het werk</span><br>{$over}</p>";
+        $html .= $bio == '' ? '' : "<p><span style=\"font-family: anton; font-size: 125%;\">Biografie {$artwork['KunstDesignerAntonBlackSmaller']}</span><br>{$bio}</p>";
         if ($s % 2 == 1) {
-            $catalog->writeHTMLCell($COL, $HEIGHT - 12, $LEFT, $MARGIN, $html, 0);
+            $catalog->writeHTMLCell($COL, 0 /*$HEIGHT - 12*/, $LEFT, $MARGIN, $html, 0, 1);
         } else {
-            $catalog->writeHTMLCell($COL, $HEIGHT - 12, $LEFT + $WIDTH - $COL, $MARGIN, $html, 0);
+            $catalog->writeHTMLCell($COL, 0 /*$HEIGHT - 12*/, $LEFT + $WIDTH - $COL, $MARGIN, $html, 0, 1);
         }
+        if ($artwork['Instagram'] != '') {
+            $instaH = $catalog->getY() + 2;
+            $instaL = $LEFT + 1 + ($s % 2 == 1 ? 0 : $WIDTH - $COL);
+            $catalog->ImageSVG('/images/instagram.svg', $instaL, $instaH - 0.25, 4.25);
+            $catalog->writeHTMLCell($COL - 10, 0, $instaL + 5, $instaH, "<p>{$artwork['Instagram']}</p>");
+        }
+
         if ($s % 2 == 1) {
             $catalog->writeHTMLCell($COL, 12, $LEFT, $MARGIN + $HEIGHT - 12, $info, 0);
         } else {
             $catalog->writeHTMLCell($COL, 12, $LEFT + $WIDTH - $COL, $MARGIN + $HEIGHT - 12, $info, 0);
         }
-
         // POSITIONING and SIZE of IMAGES
         if ($s % 2 == 1) {
             $x1 = round($LEFT + $COL + $SPACER);
