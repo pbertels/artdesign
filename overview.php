@@ -61,7 +61,7 @@ foreach ($art as $code => $artwork) {
     // IMAGE
     if (is_array($artwork['im']) && count($artwork['im']) > 0) {
         $image = $artwork['im'][array_key_first($artwork['im'])];
-        $image = str_replace('images/', 'images/thumbnails/', $image);
+        $image = thumbnail($image);
         list($orig_W, $orig_H) = getimagesize($image);
         $imW = (int) $SIZE_X - $SPACER;
         $imH = (int) ($orig_H * $imW / $orig_W);

@@ -37,6 +37,8 @@ if ($TYPE != '') {
     $catalog->SetMargins($MARGIN, $MARGIN, null, true);
     $catalog->SetAutoPageBreak(false);
     $catalog->SetBooklet(true, $MARGIN, $MARGIN + $GUTTER);
+    if ($COMPRESS) $catalog->setJPEGQuality(75);
+    else $catalog->setJPEGQuality(90);
 
     // PREFACE
     $afronden = ((count($art) - count($art) % 10) / 10);
@@ -147,7 +149,7 @@ if ($TYPE != '') {
             if ($count > 0) {
                 $height = (($y2 - $y1) - ($count - 1) * $SPACER) / $count;
                 foreach ($artwork['im'] as $pic => $image) {
-                    if ($COMPRESS) $image = str_replace('images/', 'images/thumbnails/', $image);
+                    if ($COMPRESS) $image = thumbnail($image);
                     list($orig_W, $orig_H) = getimagesize($image);
                     $imH = round($height);
                     $imW = round($orig_W * $imH / $orig_H);

@@ -14,6 +14,11 @@ $STEPS = [
     50 => 10,
     0 => 50,
 ];
+function thumbnail($image)
+{
+    $thumb = str_replace('images/', 'images/thumbnails/', $image);
+    return file_exists($thumb) ? $thumb : $image;
+}
 function euro($org)
 {
     $price = "{$org}";
