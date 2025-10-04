@@ -62,7 +62,7 @@ foreach ($art as $code => $artwork) {
     $silent->setFont('anton', '', 24);
     $silent->setColorArray('text', $RED);
     $silent->setX(0);
-    $silent->writeHTML("<h3>{$artwork['WerkHoofdletters']}</h3>");
+    $silent->writeHTML("<h3>{$artwork['WerkHoofdlettersKorter']}</h3>");
     $silent->setColorArray('text', $GREEN);
     $silent->setFont('anton', '', 10);
     $silent->writeHTML("<h1>{$artwork['KunstDesignerAntonGreen']}</h1>");
