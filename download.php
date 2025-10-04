@@ -102,7 +102,7 @@ if ($TYPE != '') {
         }
 
         // FORMAT
-        $info = "<p><b>Lot {$lot}</b><br>";
+        $info = "<p><span style=\"font-family: anton; font-size: 125%;\">Lot {$lot}</span><br>";
         if ($artwork['Formaat'] != "") $info .= "{$artwork['Formaat']}<br>";
         $info .= "Bieden start bij " . (is_numeric($artwork['Prijs']) ? euro($artwork['Prijs']) : $artwork['Prijs']);
         $info .= "</p>";
@@ -216,7 +216,7 @@ if ($TYPE != '') {
     $table = [];
     $i = 1;
     foreach ($art as $code => $artwork) {
-        $artist = hearts($artwork['KunstDesigner'], 8);
+        $artist = hearts($artwork['KunstDesignerShort'], 7);
         $work = $artwork['Werk'];
         $price = $artwork['PrijsEuro'];
         $number = $artwork['Lot'];
@@ -235,14 +235,19 @@ if ($TYPE != '') {
     $header .= "<td width=\"2.5cm\" style=\"text-align: right\">Prijs</td>";
     $header .= '</tr>';
     $catalog->setColorArray('text', $BLACK);
-    $step = 25;
+    $step = 30;
+    $evenOdd = 0;
     for ($i = 0; $i < count($table); $i += $step) {
+        $evenOdd++;
         $catalog->AddPage();
         $catalog->setFont('anton', '', 9);
         $html = '<table>' . $header . '</table>';
+        if ($evenOdd % 2 == 0) $html = str_replace('<td width="2cm"', '<td width="1cm"></td><td width="2cm"', $html);
         $catalog->writeHTML($html);
+        $catalog->Ln(-2);
         $catalog->setFont('helvetica', '', 9);
         $html = '<table>' . implode('', array_slice($table, $i, $step)) . '</table>';
+        if ($evenOdd % 2 == 0) $html = str_replace('<tr>', '<tr><td width="1cm"></td>', $html);
         $catalog->writeHTML($html);
     }
 

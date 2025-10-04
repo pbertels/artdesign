@@ -134,9 +134,10 @@ foreach ($art as $code => $artwork) {
     $artwork['KunstDesignerAntonBlackSmaller'] = hearts($artwork['KunstDesigner'], 11, 'anton');
     $artwork['KunstDesignerHelveticaBlack'] = hearts($artwork['KunstDesigner'], 7, '');
     $artwork['BiografieHelveticaBlack'] = hearts($artwork['Biografie'], 7, '');
+    $artwork['KunstDesignerShort'] = str_replace([' en Nathalie Sternotte'], [' en<br>Nathalie Sternotte'], $artwork['KunstDesigner']);
+    // $artwork
 
     if ($artwork['Lot'] == '' || $artwork['Lot'] == 0) {
-        // echo "<pre>{$artwork['Lot']} LEEG {$code}</pre>";
         $next = max($lotnrs) + 1;
         $artwork['Lot'] = $next;
     }
@@ -146,16 +147,12 @@ foreach ($art as $code => $artwork) {
             if ($lotnrs[$i] < $t) $next = $lotnrs[$i];
         }
         $next++;
-        // echo "<pre>{$artwork['Lot']} hadden we al: {$next} {$code}</pre>";
         $artwork['Lot'] = $next;
     } else {
-        // echo "<pre>{$artwork['Lot']} is UNIEK</pre>";
     }
     $lotnrs[] = $artwork['Lot'];
     $art[$code] = $artwork;
 }
-// echo '<pre>' . print_r($art, true) . '</pre>';
-// exit;
 
 // SORTEREN
 array_multisort(array_column($art, 'Lot'), SORT_ASC, $art);
