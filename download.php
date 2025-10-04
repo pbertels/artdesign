@@ -21,7 +21,7 @@ $WHITE = [255, 255, 255];
 $BLEED = 2;
 $SIZE_W = 210 + 2 * $BLEED;
 $SIZE_H = 148 + 2 * $BLEED;
-$MARGIN = 10;
+$MARGIN = 10 + $BLEED;
 $GUTTER = 10;
 $WIDTH = $SIZE_W - 2 * $MARGIN - $GUTTER;
 $HEIGHT = $SIZE_H - 2 * $MARGIN;
@@ -71,7 +71,7 @@ if ($TYPE != '') {
 
 
     // ART
-    $s = 0;
+    $s = 1;
     $section = 0;
     $prev = 'brol';
     foreach ($art as $code => $artwork) {
@@ -96,6 +96,10 @@ if ($TYPE != '') {
             $section++;
             $cat = ['1' => 'Veiling op papier', '2' => 'Live bieden'];
             $categorie = isset($cat[$t]) ? $cat[$t] : 'ONBEKEND';
+            while ($catalog->getNumPages() % 2 == 0) {
+                $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
+                $s++;
+            }
             $catalog->AddSectionPage('', $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD);
             $catalog->AddSectionPage($categorie, $section % 2 == 1 ? $GREEN : $RED, $WHITE, $WIDTH, $leftODD, 400);
             $prev = $t;
@@ -189,18 +193,6 @@ if ($TYPE != '') {
                     );
                     $y2 -= round($height + $SPACER);
                 }
-
-                // $x = $leftODD;
-                // $width = ($WIDTH - ($count - 1) * $SPACER) / $count;
-                // foreach ($artwork['im'] as $pic => $image) {
-                //     list($orig_W, $orig_H) = getimagesize($image);
-                //     if ($orig_W > $orig_H) {
-                //         $catalog->Image($image, $x, $MARGIN, $width, 0);
-                //     } else {
-                //         $catalog->Image($image, $x, $MARGIN, 0, $width);
-                //     }
-                //     $x += $width + $SPACER;
-                // }
             } else {
                 $catalog->setLineStyle(['width' => 1, 'cap' => 'butt', 'join' => 'miter', 'dash' => 2, 'color' => $BLACK]);
                 $catalog->Rect($x1, $y1, $x2 - $x1, $y2 - $y1, 'L', [], $WHITE);
@@ -211,6 +203,7 @@ if ($TYPE != '') {
     }
 
     // SUMMARY
+    while ($catalog->getNumPages() % 2 == 0) $catalog->AddSectionPage('', $RED, $WHITE, $WIDTH, $leftODD);
     $catalog->AddSectionPage('', $RED, $WHITE, $WIDTH, $leftODD);
     $catalog->AddSectionPage('Overzicht van alle loten', $RED, $WHITE, $WIDTH, $leftODD, 400);
     $table = [];
