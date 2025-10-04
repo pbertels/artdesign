@@ -4,10 +4,11 @@ require __DIR__ . '/parse.php';
 
 $cols = isset($_GET['bio']) ? ['Code', 'Lot', 'Code', 'Werk'] : ['Lot', 'KunstDesigner', 'Werk', 'Prijs'];
 
-if (!isset($_GET['bio'])) {
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment;filename=proper.tsv');
-}
+$timestamp = date('Ymd-Hi');
+$filename =  isset($_GET['bio']) ? "proper-{$timestamp}.tsv" : "proper.tsv";
+
+header("Content-Type: text/csv");
+header("Content-Disposition: attachment;filename={$filename}");
 
 foreach ($cols as $col) {
     echo "$col\t";
