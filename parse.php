@@ -133,6 +133,7 @@ foreach ($art as $code => $artwork) {
     $artwork['KunstDesignerAntonBlack'] = hearts($artwork['KunstDesigner'], 15, 'anton');
     $artwork['KunstDesignerAntonBlackSmaller'] = hearts($artwork['KunstDesigner'], 11, 'anton');
     $artwork['KunstDesignerHelveticaBlack'] = hearts($artwork['KunstDesigner'], 7, '');
+    $artwork['BiografieHelveticaBlack'] = hearts($artwork['Biografie'], 7, '');
 
     if ($artwork['Lot'] == '' || $artwork['Lot'] == 0) {
         // echo "<pre>{$artwork['Lot']} LEEG {$code}</pre>";

@@ -28,7 +28,7 @@ $HEIGHT = $SIZE_H - 2 * $MARGIN;
 $leftODD = $MARGIN + $GUTTER;
 $leftEVEN = $MARGIN;
 $SPACER = 10;
-$COL = 90;
+$COL_ORIGINAL = 90;
 $timestamp = date('Ymd-Hi');
 
 // CREATE PDF of RIGHT TYPE
@@ -78,9 +78,17 @@ if ($TYPE != '') {
 
         // DATA
         $work = $artwork['WerkHoofdlettersKorter'];
-        $bio = $artwork['Biografie'];
+        $bio = $artwork['BiografieHelveticaBlack'];
         $over = $artwork['OverWerk'];
         $lot = strtoupper($artwork['Lot']);
+
+        // EXTRA
+        $COL = $COL_ORIGINAL;
+        if (in_array($code, ['vanderborght', 'goethals1', 'ojomo'])) {
+            $COL = $COL + 1 * $SPACER;
+        } else if (in_array($code, ['spierenburg', 'vanhaverbeke2', 'jordyarthur1', 'vermoesen', 'opdebeeck', 'albers', 'laporta', 'tweelinckx', 'stappaerts1', 'lagrange', 'raemdonck', 'vertommen', 'verhaegen', 'vrints', 'teddies', 'steel', 'lezy', 'oim1', 'timm', 'pola', 'schillemans', 'dhondt', 'vercaigne', 'nhannes', 'domen', 'subtitles', 'sharpart'])) {
+            $COL = $COL - 1.5 * $SPACER;
+        }
 
         // CATEGORIE
         $t = substr($lot, 0, 1);
