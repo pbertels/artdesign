@@ -132,6 +132,7 @@ foreach ($art as $code => $artwork) {
     $artwork['KunstDesignerAntonGreenSmaller'] = hearts(str_replace(' en ', ' <br>en ', $artwork['KunstDesigner']), 14, 'anton', 'green');
     $artwork['KunstDesignerAntonBlack'] = hearts($artwork['KunstDesigner'], 15, 'anton');
     $artwork['KunstDesignerAntonBlackSmaller'] = hearts($artwork['KunstDesigner'], 11, 'anton');
+    $artwork['OverWerkelveticaBlack'] = hearts($artwork['OverWerk'], 7, '');
     $artwork['KunstDesignerHelveticaBlack'] = hearts($artwork['KunstDesigner'], 7, '');
     $artwork['BiografieHelveticaBlack'] = hearts($artwork['Biografie'], 7, '');
     $artwork['KunstDesignerShort'] = str_replace([' en Nathalie Sternotte'], [' en<br>Nathalie Sternotte'], $artwork['KunstDesigner']);

@@ -79,7 +79,7 @@ if ($TYPE != '') {
         // DATA
         $work = $artwork['WerkHoofdlettersKorter'];
         $bio = $artwork['BiografieHelveticaBlack'];
-        $over = $artwork['OverWerk'];
+        $over = $artwork['OverWerkelveticaBlack'];
         $lot = strtoupper($artwork['Lot']);
 
         // EXTRA
