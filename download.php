@@ -57,7 +57,7 @@ if ($TYPE != '') {
     $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 22, "
         <p></p>
         <p>Meer dan {$AANTAL} kunstenaars en designers schonken hun werk voor deze veiling: schilderijen, beelden en designobjecten die samen een uniek en divers geheel vormen. Elk stuk is niet alleen een uitdrukking van creativiteit, maar ook van solidariteit.</p>
-        <p>De opbrengst gaat integraal naar het Rode Kruis, Oxfam en UNRWA. Drie organisaties die dagelijks het verschil maken, en die we met dit initiatief extra willen ondersteunen. Uw aanwezigheid en biedingen zorgen ervoor dat kunst hier méér wordt dan bewondering alleen: ze wordt een daad van verbondenheid.</p>
+        <p>De opbrengst gaat integraal naar {$DOELENLIJST}. Drie organisaties die dagelijks het verschil maken, en die we met dit initiatief extra willen ondersteunen. Uw aanwezigheid en biedingen zorgen ervoor dat kunst hier méér wordt dan bewondering alleen: ze wordt een daad van verbondenheid.</p>
         <p>Onze dank gaat ook uit naar onze sponsors: {$SPONSORLIST}. Dankzij hun steun kunnen we dit evenement niet alleen mogelijk maken, maar ook aangenaam, feestelijk en net iets minder dorstig.</p>
         <p>Blader gerust, kies met uw hart, en laat u meeslepen door de energie van de veiling. Want uiteindelijk wint niet enkel de hoogste bieder, maar vooral de mensen en doelen die we samen een stap vooruit helpen.</p>
         <p></p>
@@ -66,7 +66,18 @@ if ($TYPE != '') {
         <p>Met warmte en dankbaarheid,</p>
         <p>Fred, Evelyn, Peter, Pieter & Jasmien</p>
         ");
-    // $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
+
+    // DOELEN
+    $catalog->AddPage();
+    $catalog->setColorArray('text', $BLACK);
+    $catalog->setFont('helvetica', '', 9);
+    $table = "<table>";
+    foreach ($DOELEN as $code => $doel) {
+        $table .= "<tr><td style=\"width: 3cm\"><img height=\"2cm\" src=\"./sponsors/{$code}.png\"></td><td style=\"width: 14cm\"><p><span style=\"font-family: anton; font-size: 125%;\">{$doel['name']}</span><br>{$doel['desc']}</p><p>&nbsp;</p></td></tr>";
+    }
+    $table .= "</table>";
+    $catalog->writeHTML($table);
+    $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
     // $catalog->AddSectionPage("Foto's en uitleg bij alle werken", $GREEN, $WHITE, $WIDTH, $leftODD, 400);
 
 
@@ -255,7 +266,10 @@ if ($TYPE == 'binnenwerk') {
 } else if ($TYPE == 'kaft') {
     $THICKNESS = (round(((2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20)) / 2) + 1) * 0.5;
     $COVER = 2 * $SIZE_W + $THICKNESS - 2 * $BLEED;
-    $kaft = new PdfCatalog($COVER, $SIZE_W);
+    $kaft = new PdfCatalog($COVER, $SIZE_H);
+    $kaft->setMargins(0, 0);
+    $kaft->SetAutoPageBreak(false);
+
     $kaft->setFont('anton', '', 10);
 
     // front
@@ -268,9 +282,6 @@ if ($TYPE == 'binnenwerk') {
     $kaft->setFont('helvetica', '', 18);
     $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $SIZE_W / 2, "<p>{$COVER} mm x {$SIZE_W} mm</p>", 0, 1, false, true, 'C', false);
 
-    // rug
-    // $kaft->Rect($SIZE_W, 0, $THICKNESS, $SIZE_W, 'F', [], $BLACK);
-
     // back
     $ROW = 5;
     $i = count($SPONSORS);
@@ -280,7 +291,7 @@ if ($TYPE == 'binnenwerk') {
     $sponsorPITCH = $WIDTH / $ROW;
     $sponsorLEFT = $leftEVEN;
     $x = $sponsorLEFT + $SPACER / 2;
-    $y = $WIDTH - (($i - $i % $ROW) / $ROW) * ($sponsorHEIGHT + $SPACER);
+    $y = $HEIGHT - (($i - $i % $ROW) / $ROW - 1) * ($sponsorHEIGHT + $SPACER) - $MARGIN;
     $kaft->setFont('helvetica', '', 8);
     foreach ($SPONSORS as $code => $sponsor) {
         if (isset($sponsor['logo']) && $sponsor['logo'] ==  false) continue;
