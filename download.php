@@ -263,7 +263,8 @@ if ($TYPE != '') {
 if ($TYPE == 'binnenwerk') {
     $catalog->output("catalog-{$timestamp}.pdf");
 } else if ($TYPE == 'kaft') {
-    $THICKNESS = (round(((2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20)) / 2) + 2) * 0.5;
+    // $THICKNESS = (round(((2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20)) / 2) + 2) * 0.5;
+    $THICKNESS = 11;
     $COVER = 2 * $SIZE_W + $THICKNESS - 2 * $BLEED;
     $kaft = new PdfCatalog($COVER, $SIZE_H);
     $kaft->setMargins(0, 0);
