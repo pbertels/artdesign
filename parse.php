@@ -140,6 +140,10 @@ foreach ($art as $code => $artwork) {
     $artwork['KunstDesignerHelveticaBlack'] = hearts($artwork['KunstDesigner'], 7, '');
     $artwork['BiografieHelveticaBlack'] = hearts($artwork['Biografie'], 7, '');
     $artwork['KunstDesignerShort'] = str_replace([' en Nathalie Sternotte'], [' en<br>Nathalie Sternotte'], $artwork['KunstDesigner']);
+    if (is_array($artwork['im']) && count($artwork['im']) > 0) {
+        $artwork['Afbeelding'] = str_replace('./', 'https://stgl.be/', $artwork['im'][array_key_first($artwork['im'])]);
+        $artwork['AfbeeldingKlein'] = str_replace('./', 'https://stgl.be/', thumbnail($artwork['im'][array_key_first($artwork['im'])]));
+    }
     // $artwork
 
     if ($artwork['Lot'] == '' || $artwork['Lot'] == 0) {

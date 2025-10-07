@@ -2,7 +2,7 @@
 
 require __DIR__ . '/parse.php';
 
-$cols = isset($_GET['bio']) ? ['Code', 'Lot', 'Code', 'Werk'] : ['Lot', 'KunstDesigner', 'Werk', 'Prijs'];
+$cols = isset($_GET['bio']) ? ['Code', 'Lot', 'Code', 'Werk'] : ['Lot', 'KunstDesigner', 'Werk', 'Prijs', 'Afbeelding', 'AfbeeldingKlein'];
 
 $timestamp = date('Ymd-Hi');
 $filename =  isset($_GET['bio']) ? "proper-{$timestamp}.tsv" : "proper.tsv";

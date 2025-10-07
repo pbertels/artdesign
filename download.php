@@ -45,16 +45,15 @@ if ($TYPE != '') {
     $cijfers = ['nul', 'tien', 'twintig', 'dertig', 'veertig', 'vijftig', 'zestig', 'zeventig', 'tachtig', 'negentig', 'honderd', 'honderdentien'];
     $AANTAL = $cijfers[$afronden];
     $catalog->AddSectionPage('Voorwoord', $RED, $WHITE, $WIDTH, $leftODD, 400);
-    $catalog->AddSectionPage('', $RED, $WHITE, $WIDTH, $leftODD);
     $catalog->AddPage();
     $catalog->setFont('anton', '', 7);
     $catalog->setColorArray('text', $RED);
-    $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN, '<h1 style="font-size: 500%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'L', false);
+    $catalog->writeHTMLCell($WIDTH, 25, $leftEVEN, $MARGIN, '<h1 style="font-size: 500%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'L', false);
     $catalog->setColorArray('text', $GREEN);
-    $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 12, '<h1 style="font-size: 460%">FOR PALESTINE</h1>', 0, 1, false, true, 'L', false);
+    $catalog->writeHTMLCell($WIDTH, 25, $leftEVEN, $MARGIN + 12, '<h1 style="font-size: 460%">FOR PALESTINE</h1>', 0, 1, false, true, 'L', false);
     $catalog->setColorArray('text', $BLACK);
     $catalog->setFont('helvetica', '', 9);
-    $catalog->writeHTMLCell($WIDTH, 25, $leftODD, $MARGIN + 22, "
+    $catalog->writeHTMLCell($WIDTH, 25, $leftEVEN, $MARGIN + 22, "
         <p></p>
         <p>Meer dan {$AANTAL} kunstenaars en designers schonken hun werk voor deze veiling: schilderijen, beelden en designobjecten die samen een uniek en divers geheel vormen. Elk stuk is niet alleen een uitdrukking van creativiteit, maar ook van solidariteit.</p>
         <p>De opbrengst gaat integraal naar {$DOELENLIJST}. Drie organisaties die dagelijks het verschil maken, en die we met dit initiatief extra willen ondersteunen. Uw aanwezigheid en biedingen zorgen ervoor dat kunst hier méér wordt dan bewondering alleen: ze wordt een daad van verbondenheid.</p>
@@ -73,11 +72,11 @@ if ($TYPE != '') {
     $catalog->setFont('helvetica', '', 9);
     $table = "<table>";
     foreach ($DOELEN as $code => $doel) {
-        $table .= "<tr><td style=\"width: 3cm\"><img height=\"2cm\" src=\"./sponsors/{$code}.png\"></td><td style=\"width: 14cm\"><p><span style=\"font-family: anton; font-size: 125%;\">{$doel['name']}</span><br>{$doel['desc']}</p><p>&nbsp;</p></td></tr>";
+        $table .= "<tr><td style=\"width: 1.5cm\"></td><td style=\"width: 3cm\"><img height=\"2cm\" src=\"./sponsors/{$code}.png\"></td><td style=\"width: 14cm\"><p><span style=\"font-family: anton; font-size: 125%;\">{$doel['name']}</span><br>{$doel['desc']}</p><p>&nbsp;</p></td></tr>";
     }
     $table .= "</table>";
     $catalog->writeHTML($table);
-    $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
+    // $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
     // $catalog->AddSectionPage("Foto's en uitleg bij alle werken", $GREEN, $WHITE, $WIDTH, $leftODD, 400);
 
 
@@ -97,7 +96,7 @@ if ($TYPE != '') {
         $COL = $COL_ORIGINAL;
         if (in_array($code, ['vanderborght', 'goethals1', 'ojomo'])) {
             $COL = $COL + 1 * $SPACER;
-        } else if (in_array($code, ['spierenburg', 'vanhaverbeke2', 'jordyarthur1', 'vermoesen', 'opdebeeck', 'albers', 'laporta', 'tweelinckx', 'stappaerts1', 'lagrange', 'raemdonck', 'vertommen', 'verhaegen', 'vrints', 'teddies', 'steel', 'lezy', 'oim1', 'timm', 'pola', 'schillemans', 'dhondt', 'vercaigne', 'nhannes', 'domen', 'subtitles', 'sharpart'])) {
+        } else if (in_array($code, ['hermans1', 'spierenburg', 'vanhaverbeke2', 'jordyarthur1', 'vermoesen', 'opdebeeck', 'albers', 'laporta', 'tweelinckx', 'stappaerts1', 'lagrange', 'raemdonck', 'vertommen', 'verhaegen', 'vrints', 'teddies', 'steel', 'lezy', 'oim1', 'timm', 'pola', 'schillemans', 'dhondt', 'vercaigne', 'nhannes', 'domen', 'subtitles', 'sharpart'])) {
             $COL = $COL - 1.5 * $SPACER;
         }
 
@@ -264,7 +263,7 @@ if ($TYPE != '') {
 if ($TYPE == 'binnenwerk') {
     $catalog->output("catalog-{$timestamp}.pdf");
 } else if ($TYPE == 'kaft') {
-    $THICKNESS = (round(((2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20)) / 2) + 1) * 0.5;
+    $THICKNESS = (round(((2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20)) / 2) + 2) * 0.5;
     $COVER = 2 * $SIZE_W + $THICKNESS - 2 * $BLEED;
     $kaft = new PdfCatalog($COVER, $SIZE_H);
     $kaft->setMargins(0, 0);
@@ -274,13 +273,17 @@ if ($TYPE == 'binnenwerk') {
 
     // front
     $kaft->AddPage();
+    $kaft->setFillColorArray([167, 219, 208]);
+    $kaft->Rect(0, 35.5, $COVER, $SIZE_H, 'F');
+    $kaft->Image('./images/verf-transparant.png', $SIZE_W + $THICKNESS + $MARGIN + 10, 30, $WIDTH);
     $kaft->setColorArray('text', $RED);
-    $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $MARGIN, '<h1 style="font-size: 700%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
+    $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $MARGIN, '<h1 style="font-size: 600%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
     $kaft->setColorArray('text', $GREEN);
-    $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $MARGIN + 25, '<h1 style="font-size: 645%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
+    $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $MARGIN + 21, '<h1 style="font-size: 552%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
+    $kaft->setColorArray('text', $WHITE);
+    $kaft->setFont('anton', '', 32);
+    $kaft->writeHTMLCell($WIDTH, 20, $SIZE_W + $THICKNESS + $leftODD, 104, "<p>CATALOGUS</p>", 0, 1, false, true, 'C', false);
     $kaft->setColorArray('text', $BLACK);
-    $kaft->setFont('helvetica', '', 18);
-    $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $SIZE_W / 2, "<p>{$COVER} mm x {$SIZE_W} mm</p>", 0, 1, false, true, 'C', false);
 
     // back
     $ROW = 5;
