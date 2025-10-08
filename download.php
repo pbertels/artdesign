@@ -9,8 +9,8 @@ require __DIR__ . '/sponsors.php';
 require __DIR__ . '/parse.php';
 
 // TYPE
-$TYPE = isset($_GET['type']) && in_array($_GET['type'], ['binnenwerk', 'kaft']) ? $_GET['type'] : 'binnenwerk';
-$COMPRESS = isset($_GET['compress']);
+$TYPE = isset($_GET['type']) && in_array($_GET['type'], ['binnenwerk', 'kaft']) ? $_GET['type'] : 'alles';
+$COMPRESS = $TYPE == 'alles' ? true : isset($_GET['compress']);
 
 // DEFINITIONS
 $RED = [235, 90, 60];
@@ -30,6 +30,63 @@ $leftEVEN = $MARGIN;
 $SPACER = 10;
 $COL_ORIGINAL = 90;
 $timestamp = date('Ymd-Hi');
+
+function coverFront($kaft, $w, $h, $m, $l, $page = 0)
+{
+    $RED = [235, 90, 60];
+    $GREEN = [80, 127, 35];
+    $BLACK = [0, 0, 0];
+    $WHITE = [255, 255, 255];
+
+    $kaft->AddPage();
+    $kaft->setFillColorArray([167, 219, 208]);
+    $kaft->Rect(0, 35.5, $l + $w + $m, $h, 'F');
+    $kaft->Image('./images/verf-transparant.png', $l, 30, $w);
+    $kaft->setColorArray('text', $RED);
+    $kaft->writeHTMLCell($w, 25, $l, $m, '<h1 style="font-size: 600%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
+    $kaft->setColorArray('text', $GREEN);
+    $kaft->writeHTMLCell($w, 25, $l, $m + 21, '<h1 style="font-size: 552%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
+    $kaft->setColorArray('text', $WHITE);
+    $kaft->setFont('anton', '', 32);
+    $kaft->writeHTMLCell($w, 20, $l, 104, "<p>CATALOGUS</p>", 0, 1, false, true, 'C', false);
+    $kaft->setColorArray('text', $BLACK);
+    if ($page != 0) $kaft->movePage($kaft->PageNo(), $page);
+}
+
+function coverBack($kaft, $SPONSORS, $ROW, $w, $h, $m, $l, $SPACER)
+{
+    $i = count($SPONSORS);
+    foreach ($SPONSORS as $s) if (isset($s['logo']) && $s['logo'] ==  false) $i--;
+    $sponsorWIDTH = $w / $ROW - $SPACER;
+    $sponsorHEIGHT = 90 / 120 * $sponsorWIDTH;
+    $sponsorPITCH = $w / $ROW;
+    $sponsorLEFT = $l;
+    $x = $sponsorLEFT + $SPACER / 2;
+    $y = $h - (($i - $i % $ROW) / $ROW - 1) * ($sponsorHEIGHT + $SPACER) - $m;
+    $kaft->setFont('helvetica', '', 8);
+    foreach ($SPONSORS as $code => $sponsor) {
+        if (isset($sponsor['logo']) && $sponsor['logo'] ==  false) continue;
+        $logoPNG = "./sponsors/{$code}.png";
+        $logoSVG = "./sponsors/{$code}.svg";
+        if (file_exists($logoPNG)) {
+            $kaft->Image($logoPNG, $x, $y, $sponsorWIDTH, 0);
+        } else if (file_exists($logoSVG)) {
+            $kaft->ImageSVG($logoSVG, $x, $y, $sponsorWIDTH, 0);
+        } else {
+            $kaft->writeHTMLCell($sponsorWIDTH, $sponsorHEIGHT, $x, $y, "<p>{$sponsor['name']}</p>", 1, 1, false, true, 'C', false);
+        }
+        $i--;
+        $x += $sponsorPITCH;
+        if ($x > $w) {
+            if ($i > $ROW) {
+                $x = $sponsorLEFT + $SPACER / 2;
+            } else {
+                $x = $sponsorLEFT + $SPACER / 2 + ($ROW - $i) * $sponsorPITCH / 2;
+            }
+            $y += $sponsorHEIGHT + $SPACER;
+        }
+    }
+}
 
 // CREATE PDF of RIGHT TYPE
 if ($TYPE != '') {
@@ -255,15 +312,25 @@ if ($TYPE != '') {
     }
 
     // EXTRA PAGES
-    while ($catalog->getNumPages() % 4 != 0) {
+    if ($TYPE == 'alles') {
         $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
+    } else {
+        while ($catalog->getNumPages() % 4 != 0) {
+            $catalog->AddSectionPage('', $GREEN, $WHITE, $WIDTH, $leftODD);
+        }
     }
 }
 
 if ($TYPE == 'binnenwerk') {
     $catalog->output("catalog-{$timestamp}.pdf");
+} else if ($TYPE == 'alles') {
+    coverFront($catalog, $WIDTH, $SIZE_H, $MARGIN, $MARGIN + $GUTTER, 1);
+    $catalog->AddPage();
+    $catalog->setFillColorArray([167, 219, 208]);
+    $catalog->Rect(0, 0, $SIZE_W, $SIZE_H, 'F');
+    coverBack($catalog, $SPONSORS, 5, $WIDTH, $HEIGHT, $MARGIN, $MARGIN, $SPACER);
+    $catalog->output("catalogus-lowres-{$timestamp}.pdf");
 } else if ($TYPE == 'kaft') {
-    // $THICKNESS = (round(((2 * 0.48) + ($catalog->getNumPages() / 2 * 0.20)) / 2) + 2) * 0.5;
     $THICKNESS = 11;
     $COVER = 2 * $SIZE_W + $THICKNESS - 2 * $BLEED;
     $kaft = new PdfCatalog($COVER, $SIZE_H);
@@ -273,52 +340,11 @@ if ($TYPE == 'binnenwerk') {
     $kaft->setFont('anton', '', 10);
 
     // front
-    $kaft->AddPage();
-    $kaft->setFillColorArray([167, 219, 208]);
-    $kaft->Rect(0, 35.5, $COVER, $SIZE_H, 'F');
-    $kaft->Image('./images/verf-transparant.png', $SIZE_W + $THICKNESS + $MARGIN + 10, 30, $WIDTH);
-    $kaft->setColorArray('text', $RED);
-    $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $MARGIN, '<h1 style="font-size: 600%">ART &amp; DESIGN</h1>', 0, 1, false, true, 'C', false);
-    $kaft->setColorArray('text', $GREEN);
-    $kaft->writeHTMLCell($WIDTH, 25, $SIZE_W + $THICKNESS + $leftODD, $MARGIN + 21, '<h1 style="font-size: 552%">FOR PALESTINE</h1>', 0, 1, false, true, 'C', false);
-    $kaft->setColorArray('text', $WHITE);
-    $kaft->setFont('anton', '', 32);
-    $kaft->writeHTMLCell($WIDTH, 20, $SIZE_W + $THICKNESS + $leftODD, 104, "<p>CATALOGUS</p>", 0, 1, false, true, 'C', false);
-    $kaft->setColorArray('text', $BLACK);
+    coverFront($kaft, $WIDTH, $SIZE_H, $MARGIN, $SIZE_W + $THICKNESS + $leftODD);
 
     // back
-    $ROW = 5;
-    $i = count($SPONSORS);
-    foreach ($SPONSORS as $s) if (isset($s['logo']) && $s['logo'] ==  false) $i--;
-    $sponsorWIDTH = $WIDTH / $ROW - $SPACER;
-    $sponsorHEIGHT = 90 / 120 * $sponsorWIDTH;
-    $sponsorPITCH = $WIDTH / $ROW;
-    $sponsorLEFT = $leftEVEN;
-    $x = $sponsorLEFT + $SPACER / 2;
-    $y = $HEIGHT - (($i - $i % $ROW) / $ROW - 1) * ($sponsorHEIGHT + $SPACER) - $MARGIN;
-    $kaft->setFont('helvetica', '', 8);
-    foreach ($SPONSORS as $code => $sponsor) {
-        if (isset($sponsor['logo']) && $sponsor['logo'] ==  false) continue;
-        $logoPNG = "./sponsors/{$code}.png";
-        $logoSVG = "./sponsors/{$code}.svg";
-        if (file_exists($logoPNG)) {
-            $kaft->Image($logoPNG, $x, $y, $sponsorWIDTH, 0);
-        } else if (file_exists($logoSVG)) {
-            $kaft->ImageSVG($logoSVG, $x, $y, $sponsorWIDTH, 0);
-        } else {
-            $kaft->writeHTMLCell($sponsorWIDTH, $sponsorHEIGHT, $x, $y, "<p>{$sponsor['name']}</p>", 1, 1, false, true, 'C', false);
-        }
-        $i--;
-        $x += $sponsorPITCH;
-        if ($x > $WIDTH) {
-            if ($i > $ROW) {
-                $x = $sponsorLEFT + $SPACER / 2;
-            } else {
-                $x = $sponsorLEFT + $SPACER / 2 + ($ROW - $i) * $sponsorPITCH / 2;
-            }
-            $y += $sponsorHEIGHT + $SPACER;
-        }
-    }
+    coverBack($kaft, $SPONSORS, 5, $WIDTH, $HEIGHT, $MARGIN, $leftEVEN, $SPACER);
+
 
     // inside
     $kaft->AddPage();

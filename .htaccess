@@ -2,4 +2,5 @@
     RewriteEngine on
     RewriteRule ^proper.tsv$ proper.php [L]
     RewriteRule ^art-design-palestine-catalogus.20250929.pdf download.php?type=binnenwerk&compress=compress [L]
+    RewriteRule ^catalogus.pdf download.php [L]
 </IfModule>
