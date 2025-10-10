@@ -9,7 +9,7 @@ require __DIR__ . '/sponsors.php';
 require __DIR__ . '/parse.php';
 
 // TYPE
-$TYPE = isset($_GET['type']) && in_array($_GET['type'], ['binnenwerk', 'kaft']) ? $_GET['type'] : 'alles';
+$TYPE = isset($_GET['type']) && in_array($_GET['type'], ['binnenwerk', 'kaft', 'sponsors']) ? $_GET['type'] : 'alles';
 $COMPRESS = $TYPE == 'alles' ? true : isset($_GET['compress']);
 
 // DEFINITIONS
@@ -62,7 +62,7 @@ function coverBack($kaft, $SPONSORS, $ROW, $w, $h, $m, $l, $SPACER)
     $sponsorPITCH = $w / $ROW;
     $sponsorLEFT = $l;
     $x = $sponsorLEFT + $SPACER / 2;
-    $y = $h - (($i - $i % $ROW) / $ROW - 1) * ($sponsorHEIGHT + $SPACER) - $m;
+    $y = $h - (($i - $i % $ROW) / $ROW) * ($sponsorHEIGHT + $SPACER) - $m;
     $kaft->setFont('helvetica', '', 8);
     foreach ($SPONSORS as $code => $sponsor) {
         if (isset($sponsor['logo']) && $sponsor['logo'] ==  false) continue;
@@ -323,12 +323,19 @@ if ($TYPE != '') {
 
 if ($TYPE == 'binnenwerk') {
     $catalog->output("catalog-{$timestamp}.pdf");
+} else if ($TYPE == 'sponsors') {
+    $sp = new PdfCatalog(420, 297);
+    $sp->AddPage();
+    $sp->setMargins(0, 0);
+    $sp->SetAutoPageBreak(false);
+    coverBack($sp, $SPONSORS, 4, 420, 297 - 50, 50, 0, 30);
+    $sp->output("sponsors-a3-{$timestamp}.pdf");
 } else if ($TYPE == 'alles') {
     coverFront($catalog, $WIDTH, $SIZE_H, $MARGIN, $MARGIN + $GUTTER, 1);
     $catalog->AddPage();
     $catalog->setFillColorArray([167, 219, 208]);
     $catalog->Rect(0, 0, $SIZE_W, $SIZE_H, 'F');
-    coverBack($catalog, $SPONSORS, 5, $WIDTH, $HEIGHT, $MARGIN, $MARGIN, $SPACER);
+    coverBack($catalog, $SPONSORS, 6, $WIDTH, $HEIGHT, $MARGIN, $MARGIN, $SPACER);
     $catalog->output("catalogus-lowres-{$timestamp}.pdf");
 } else if ($TYPE == 'kaft') {
     $THICKNESS = 11;

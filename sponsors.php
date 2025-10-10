@@ -27,6 +27,7 @@ $SPONSORS = [
     'norsu' => ['name' => 'Norsu', 'desc' => 'drukwerk'],
     'brainsolutions' => ['name' => 'Brainsolutions', 'desc' => 'audiovisueel'],
     'verschueren' => ['name' => 'Drankencentrale Verschueren', 'desc' => 'drank'],
+    'opnieuwenco' => ['name' => 'Opnieuw & Co', 'desc' => 'vanalles'],
     'masjien' => ['name' => 'Masjien', 'desc' => 'drukwerk'],
     '3wilgen' => ['name' => 'De Drie Wilgen', 'desc' => 'drank'],
     'rentabar' => ['name' => 'Rent@Bar', 'desc' => 'Dennis van de foodtrucks'],
