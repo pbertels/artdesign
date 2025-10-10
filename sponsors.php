@@ -28,7 +28,7 @@ $SPONSORS = [
     'brainsolutions' => ['name' => 'Brainsolutions', 'desc' => 'audiovisueel'],
     'verschueren' => ['name' => 'Drankencentrale Verschueren', 'desc' => 'drank'],
     // 'vanhees' => ['name' => 'Kantoor Van Hees', 'desc' => 'verzekeringen'],
-    'gsv' => ['name' => 'GSV Verhuur', 'desc' => 'toiletten'],
+    // 'gsv' => ['name' => 'GSV Verhuur', 'desc' => 'toiletten'],
     'opnieuwenco' => ['name' => 'Opnieuw & Co', 'desc' => 'vanalles'],
     'masjien' => ['name' => 'Masjien', 'desc' => 'drukwerk'],
     '3wilgen' => ['name' => 'De Drie Wilgen', 'desc' => 'drank'],
