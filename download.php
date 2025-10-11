@@ -328,7 +328,7 @@ if ($TYPE == 'binnenwerk') {
     $sp->AddPage();
     $sp->setMargins(0, 0);
     $sp->SetAutoPageBreak(false);
-    coverBack($sp, $SPONSORS, 4, 420, 297 - 50, 50, 0, 30);
+    coverBack($sp, $SPONSORS, 4, 420, 297 - 50, -40, 0, 25);
     $sp->output("sponsors-a3-{$timestamp}.pdf");
 } else if ($TYPE == 'alles') {
     coverFront($catalog, $WIDTH, $SIZE_H, $MARGIN, $MARGIN + $GUTTER, 1);
