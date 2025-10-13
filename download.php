@@ -329,7 +329,7 @@ if ($TYPE == 'binnenwerk') {
     $sp->setMargins(0, 0);
     $sp->SetAutoPageBreak(false);
     $sp->setFont('anton', '', 48);
-    $sp->writeHTMLCell(420, 25, 0, 10, '<h1>Met dank aan onze fantatische sponsors</h1>', 0, 1, false, true, 'C', false);
+    $sp->writeHTMLCell(420, 25, 0, 10, '<h1>Met dank aan onze fantastische sponsors</h1>', 0, 1, false, true, 'C', false);
     coverBack($sp, $SPONSORS, 4, 420, 277 - 50, -70, 0, 25);
     $sp->output("sponsors-a3-{$timestamp}.pdf");
 } else if ($TYPE == 'alles') {
