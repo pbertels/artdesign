@@ -328,7 +328,9 @@ if ($TYPE == 'binnenwerk') {
     $sp->AddPage();
     $sp->setMargins(0, 0);
     $sp->SetAutoPageBreak(false);
-    coverBack($sp, $SPONSORS, 4, 420, 297 - 50, -40, 0, 25);
+    $sp->setFont('anton', '', 48);
+    $sp->writeHTMLCell(420, 25, 0, 10, '<h1>Met dank aan onze fantatische sponsors</h1>', 0, 1, false, true, 'C', false);
+    coverBack($sp, $SPONSORS, 4, 420, 277 - 50, -70, 0, 25);
     $sp->output("sponsors-a3-{$timestamp}.pdf");
 } else if ($TYPE == 'alles') {
     coverFront($catalog, $WIDTH, $SIZE_H, $MARGIN, $MARGIN + $GUTTER, 1);
