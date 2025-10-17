@@ -15,31 +15,31 @@ $BLUE = [0, 0, 255];
 $BLACK = [0, 0, 0];
 $WHITE = [255, 255, 255];
 
-$W = 210;
-$H = 297;
+$W = 297;
+$H = 210;
 $MARGIN = 15;
+$MARGIN_TOP = 10;
 $WIDTH = $W - 2 * $MARGIN;
-$HEIGHT = $H - 2 * $MARGIN;
+$HEIGHT = $H - 2 * $MARGIN_TOP;
 $SPACER = 10;
 $IMAGE = 25;
 $timestamp = date('Ymd-Hi');
 
 $silent = new PdfCatalog($W, $H);
-$silent->SetMargins($MARGIN, $MARGIN, null, true);
+$silent->SetMargins($MARGIN, $MARGIN_TOP, null, true);
 $silent->SetAutoPageBreak(false);
 
 // PREPARE 
 $FIELDS = [
     'Bod' => ['2cm', 'right'],
-    'Naam' => ['7.5cm', 'left'],
-    'Telefoon' => ['4cm', 'left'],
-    'E-mail' => ['5cm', 'left'],
+    'Uw biednummer' => ['3.5cm', 'left'],
+    'Handtekening' => ['6.5cm', 'left'],
 ];
 function prepareRow($FIELDS, $values = [])
 {
     $rst = '<tr>';
     foreach ($FIELDS as $name => $field) {
-        $value = $values == 'header' ? $name : (isset($values[$name]) ? $values[$name] : '<br><br>');
+        $value = $values == 'header' ? $name : (isset($values[$name]) ? $values[$name] : '<br><br><br>');
         $align = $values == 'header' ? 'left' : $field[1];
         $rst .= "<td width=\"{$field[0]}\" style=\"text-align: {$align}\">&nbsp;&nbsp;{$value}&nbsp;&nbsp;</td>";
     }
@@ -52,6 +52,7 @@ foreach ($art as $code => $artwork) {
 
     // DATA
     $lot = $artwork['Lot'];
+    if ($lot >= 200) continue;
 
     // HEADER
     $silent->AddPage();
@@ -68,40 +69,50 @@ foreach ($art as $code => $artwork) {
     $silent->writeHTML("<h1>{$artwork['KunstDesignerAntonGreen']}</h1>");
     $silent->setColorArray('text', $BLACK);
     $silent->Ln(3);
+    $silent->setFont('helvetica', '', 12);
+    $silent->setColorArray('text', $BLACK);
+    $silent->writeHTMLCell($W / 2 - $SPACER, 0, $MARGIN - 1, $silent->GetY(), "
+<p>
+Doe een bod door uw biednummer in te vullen, en uw handtekening te plaatsen naast het bedrag van uw keuze. 
+We brengen de hoogste bieder op het einde van de veiling op de hoogte met e-mail en sms. Na betaling van het juiste bedrag, kan de winnende bieder het werk ophalen.
+<br></p>
+", 0, 1);
 
-    // IMAGE
-    if (is_array($artwork['im']) && count($artwork['im']) > 0) {
-        $image = $artwork['im'][array_key_first($artwork['im'])];
-        $image = thumbnail($image);
-        $x = $MARGIN + $WIDTH - $IMAGE;
-        $width = $IMAGE;
-        list($orig_W, $orig_H) = getimagesize($image);
-        if ($orig_W > $orig_H) {
-            $silent->Image($image, $x, $MARGIN, $width, 0);
-        } else {
-            $silent->Image($image, $x, $MARGIN, 0, $width);
-        }
-    }
+    // STEPS
+    $ALTERNATIVE_STEPS = [
+        100000000 => 1000,
+        10000 => 1000,
+        5000 => 500,
+        4200 => 300,
+        3800 => 200,
+        3200 => 300,
+        1000 => 250,
+        500 => 100,
+        200 => 50,
+        100 => 50,
+        50 => 20,
+        0 => 50,
+    ];
 
     // TABLE - print
-    $silent->setFont('anton', '', 11);
-    $html = '<table>' . prepareRow($FIELDS, 'header') . '</table>';
-    $silent->writeHTML($html);
-    $silent->Ln(-2);
-    $html = '<table border="1px solid gray">';
-    $i = 0;
     $bod = $artwork['Prijs'];
-    if (is_numeric($bod)) {
-        for ($i = 0; $i < 15; $i++) {
+    $silent->setY(68.2);
+    for ($column = 0; $column <= 1; $column++) {
+        $silent->setFont('anton', '', 11);
+        $html = '<table>' . prepareRow($FIELDS, 'header') . '</table>';
+        $silent->writeHTML($html);
+        $silent->Ln(-2);
+        $html = '<table border="1px solid gray">';
+        $i = 0;
+        for ($i = 0; $i < ($column == 0 ? 6 : 9); $i++) {
             $html .= prepareRow($FIELDS, ['Bod' => "<br>" . euro($bod) . "&nbsp;"]);
-            $bod = increment($bod);
+            $bod = increment($bod, $ALTERNATIVE_STEPS);
         }
-    } else {
-        $html .= "<tr><td>{$bod}</td></tr>";
+        $html .= '</table>';
+        $silent->setFont('helvetica', '', 11);
+        $silent->writeHTMLCell($W / 2, 0, $column * $W / 2 + (1 - $column) * $MARGIN + $column * $SPACER, $silent->GetY(), $html);
+        $silent->setXY($W / 2 + $SPACER, $MARGIN_TOP);
     }
-    $html .= '</table>';
-    $silent->setFont('helvetica', '', 11);
-    $silent->writeHTML($html);
 }
 
 // OUTPUT

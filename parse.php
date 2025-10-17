@@ -18,6 +18,7 @@ $STEPS = [
     50 => 10,
     0 => 50,
 ];
+
 function thumbnail($image)
 {
     $thumb = str_replace('images/', 'images/thumbnails/', $image);
@@ -33,11 +34,12 @@ function euro($org)
     }
     return is_numeric($org) ? "{$price} &euro;" : "{$org}";
 }
-function increment($bod)
+function increment($bod, $alternative = [])
 {
     global $STEPS;
-    $prev = max(array_keys($STEPS));
-    foreach ($STEPS as $s => $inc) {
+    $steps = count($alternative) > 0 ? $alternative : $STEPS;
+    $prev = max(array_keys($steps));
+    foreach ($steps as $s => $inc) {
         if ($bod >= $s) {
             $base = $s;
             $increment = $inc;
