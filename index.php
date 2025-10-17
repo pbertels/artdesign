@@ -10,4 +10,5 @@ echo '<p>Sponsors: <a href="./download.php?type=sponsors">allemaal op 1 A3</a></
 echo '<p>Powerpoint met presentatie van alle werken: <a href="./powerpoint.php">aanmaken</a></p>';
 echo '<p>Silent Auction: <a href="./silent.php">download A4</a></p>';
 echo '<p>Overzicht: <a href="./overview.php">overzicht op A4</a></p>';
+echo '<p>Kaartjes: <a href="./kaartjes.php?type=square">&lsquo;vierkantjes&rsquo;</a></p>';
 echo '<p>Single Source Of Truth: <a href="./proper.tsv">TSV data file</a></p>';
