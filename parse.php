@@ -131,6 +131,7 @@ foreach ($art as $code => $artwork) {
     $artwork['PrijsEuro'] = euro($artwork['Prijs']);
     $artwork['Instagram'] = str_replace('@', '', $artwork['Instagram']);
     $artwork['Biografie'] = $artwork['BioBewerkt'] == '' ? $artwork['BioOrigineel'] : $artwork['BioBewerkt'];
+    $artwork['BioKort'] = strpos($artwork['Biografie'], '<br>') === false ? $artwork['Biografie'] : substr($artwork['Biografie'], 0, strpos($artwork['Biografie'], '<br>'));
     $artwork['WerkHoofdletters'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['Werk']));
     $artwork['WerkHoofdlettersKorter'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['WerkKorter']));
     $artwork['ßß'] = str_replace(['é', 'â'], ['E', 'A'], strtoupper($artwork['WerkKorter']));
