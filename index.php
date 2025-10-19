@@ -7,7 +7,7 @@ echo '<h1>Art &amp; Design for Palestine</h1>';
 echo '<p>Drukwerk catalogus: <a href="./download.php?type=binnenwerk&compress=compress">binnenwerk LR</a> of <a href="./download.php?type=binnenwerk">HR</a> en <a href="./download.php?type=kaft">kaft</a></p>';
 echo '<p>Catalogus voor digitaal gebruik (kaft + binnenwerk samen): <a href="./download.php">catalogus.pdf</a></p>';
 echo '<p>Sponsors: <a href="./download.php?type=sponsors">allemaal op 1 A3</a></p>';
-echo '<p>Powerpoint met presentatie van alle werken: <a href="./powerpoint.php">aanmaken</a></p>';
+echo '<p>Powerpoint met presentatie van alle werken: <a href="./adfp-20251019-0548.pptx">download powerpoint</a></p>';
 echo '<p>Silent Auction: <a href="./silent.php">download A4</a></p>';
 echo '<p>Overzicht: <a href="./overview.php">overzicht op A4</a> of <a href="./kaartjes.php?type=veilingmeester&real">veilingmeester</a></p>';
 echo '<p>Kaartjes: <a href="./kaartjes.php?type=square&real">&lsquo;vierkantjes&rsquo;</a></p>';

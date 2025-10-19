@@ -38,20 +38,23 @@ foreach ($art as $code => $artwork) {
     $artist = html_entity_decode($artwork['KunstDesigner'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $lot = strtoupper($artwork['Lot']);
 
+    // papier
+    if ($lot < 200) continue;
+
     // new slide
     $slide = $presentation->createSlide();
 
     // number
     $shape = $slide->createRichTextShape()
         ->setHeight($MARGIN_TOP)
-        ->setWidth(0.25 * $W)
-        ->setOffsetX(10)
-        ->setOffsetY(10);
+        ->setWidth($W)
+        ->setOffsetX(0)
+        ->setOffsetY(15);
     $shape->getActiveParagraph()->getAlignment()
-        ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+        ->setHorizontal(Alignment::HORIZONTAL_CENTER);
     $textRun = $shape->createTextRun("Lot {$lot}");
     $textRun->getFont()
-        ->setName('Arial')
+        ->setName('Anton')
         ->setBold(true)
         ->setSize(24)
         ->setColor(new Color($BLACK));
@@ -59,11 +62,11 @@ foreach ($art as $code => $artwork) {
     // work
     $shape = $slide->createRichTextShape()
         ->setHeight($MARGIN_TOP)
-        ->setWidth($W)
-        ->setOffsetX(0)
-        ->setOffsetY(10);
+        ->setWidth(0.50 * $W-10)
+        ->setOffsetX(10)
+        ->setOffsetY(15);
     $shape->getActiveParagraph()->getAlignment()
-        ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        ->setHorizontal(Alignment::HORIZONTAL_LEFT);
     $textRun = $shape->createTextRun("{$work}");
     $textRun->getFont()
         ->setName('Anton')
@@ -74,11 +77,11 @@ foreach ($art as $code => $artwork) {
     // arist
     $shape = $slide->createRichTextShape()
         ->setHeight($MARGIN_TOP)
-        ->setWidth($W)
-        ->setOffsetX(0)
-        ->setOffsetY(45);
+        ->setWidth(0.50 * $W-10)
+        ->setOffsetX(0.50 * $W)
+        ->setOffsetY(15);
     $shape->getActiveParagraph()->getAlignment()
-        ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        ->setHorizontal(Alignment::HORIZONTAL_RIGHT);
     $textRun = $shape->createTextRun("{$artist}");
     $textRun->getFont()
         ->setName('Anton')
